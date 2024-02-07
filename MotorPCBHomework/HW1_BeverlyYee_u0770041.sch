@@ -135,6 +135,12 @@
 <layer number="153" name="FabDoc1" color="7" fill="1" visible="no" active="no"/>
 <layer number="154" name="FabDoc2" color="7" fill="1" visible="no" active="no"/>
 <layer number="155" name="FabDoc3" color="7" fill="1" visible="no" active="no"/>
+<layer number="156" name="gesam-Maß" color="1" fill="7" visible="no" active="no"/>
+<layer number="157" name="FaceMchng" color="3" fill="1" visible="no" active="no"/>
+<layer number="158" name="FaceMMeas" color="3" fill="1" visible="no" active="no"/>
+<layer number="159" name="Geh-Bear2" color="1" fill="7" visible="no" active="no"/>
+<layer number="160" name="Topologie" color="9" fill="1" visible="no" active="no"/>
+<layer number="161" name="tomplace2" color="7" fill="1" visible="no" active="no"/>
 <layer number="166" name="AntennaArea" color="7" fill="1" visible="no" active="no"/>
 <layer number="168" name="4mmHeightArea" color="7" fill="1" visible="no" active="no"/>
 <layer number="191" name="mNets" color="7" fill="1" visible="no" active="no"/>
@@ -182,6 +188,7 @@
 <layer number="249" name="Edge" color="7" fill="1" visible="no" active="no"/>
 <layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
 <layer number="251" name="SMDround" color="12" fill="11" visible="no" active="no"/>
+<layer number="252" name="BR-BS" color="7" fill="1" visible="no" active="no"/>
 <layer number="253" name="Extra" color="7" fill="1" visible="no" active="no"/>
 <layer number="254" name="cooling" color="7" fill="1" visible="no" active="no"/>
 <layer number="255" name="routoute" color="7" fill="1" visible="no" active="no"/>
@@ -1419,6 +1426,69 @@ DIN A4, landscape with location and doc. field</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="SparkFun-PowerSymbols" urn="urn:adsk.eagle:library:530">
+<description>&lt;h3&gt;SparkFun Power Symbols&lt;/h3&gt;
+This library contains power, ground, and voltage-supply symbols.
+&lt;br&gt;
+&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+&lt;br&gt;
+&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;
+&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="5V" urn="urn:adsk.eagle:symbol:39412/2" library_version="2">
+<description>&lt;h3&gt;5V Voltage Supply&lt;/h3&gt;</description>
+<wire x1="0.762" y1="1.27" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-0.762" y2="1.27" width="0.254" layer="94"/>
+<pin name="5V" x="0" y="0" visible="off" length="short" direction="sup" rot="R90"/>
+<text x="0" y="2.794" size="1.778" layer="96" font="vector" align="bottom-center">&gt;VALUE</text>
+</symbol>
+<symbol name="3.3V" urn="urn:adsk.eagle:symbol:39411/2" library_version="2">
+<description>&lt;h3&gt;3.3V Voltage Supply&lt;/h3&gt;</description>
+<wire x1="0.762" y1="1.27" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-0.762" y2="1.27" width="0.254" layer="94"/>
+<pin name="3.3V" x="0" y="0" visible="off" length="short" direction="sup" rot="R90"/>
+<text x="0" y="2.794" size="1.778" layer="96" font="vector" align="bottom-center">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="5V" urn="urn:adsk.eagle:component:39433/2" prefix="SUPPLY" library_version="2">
+<description>&lt;h3&gt;5V Supply Symbol&lt;/h3&gt;
+&lt;p&gt;Power supply symbol for a specifically-stated 5V source.&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="5V" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="3.3V" urn="urn:adsk.eagle:component:39435/2" prefix="SUPPLY" library_version="2">
+<description>&lt;h3&gt;3.3V Supply Symbol&lt;/h3&gt;
+&lt;p&gt;Power supply symbol for a specifically-stated 3.3V source.&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="3.3V" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -1429,7 +1499,7 @@ DIN A4, landscape with location and doc. field</description>
 </class>
 </classes>
 <groups>
-<schematic_group name="VOLTSRC" grouprefs="H-BRIDGE"/>
+<schematic_group name="VOLTSRC" grouprefs="H-BRIDGE TEMP_SNSR"/>
 <schematic_group name="MOTOR"/>
 <schematic_group name="H-BRIDGE"/>
 <schematic_group name="SNSR_GND"/>
@@ -1458,9 +1528,6 @@ DIN A4, landscape with location and doc. field</description>
 <part name="D3" library="RS2AA_R3G" deviceset="RS2AA_R3G" device=""/>
 <part name="D4" library="RS2AA_R3G" deviceset="RS2AA_R3G" device=""/>
 <part name="R5" library="RL1206FR-070R04L" deviceset="RL1206FR-070R04L" device="" value="CSR 0.04"/>
-<part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
-<attribute name="VOLTAGE" value="5v"/>
-</part>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
 <attribute name="VOLTAGE" value="6v"/>
 </part>
@@ -1472,28 +1539,23 @@ DIN A4, landscape with location and doc. field</description>
 <part name="SUPPLY5" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
 <part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X6" device="" package3d_urn="urn:adsk.eagle:package:22472/2" value="MTR_HDR"/>
-<part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="" value="6v"/>
 <part name="SUPPLY6" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
-<attribute name="VOLTAGE" value="5v"/>
-</part>
 <part name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X3" device="" package3d_urn="urn:adsk.eagle:package:22458/2" value="STM_PWR_HDR"/>
-<part name="P+6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
-<attribute name="VOLTAGE" value="3.3v"/>
-</part>
-<part name="P+7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
-<attribute name="VOLTAGE" value="5v"/>
-</part>
 <part name="SUPPLY7" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="P+8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
-<attribute name="VOLTAGE" value="3.3v"/>
-</part>
 <part name="SUPPLY8" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
 <attribute name="VOLTAGE" value="6v"/>
 </part>
 <part name="SUPPLY9" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY10" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
+<part name="SUPPLY11" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="5V" device=""/>
+<part name="SUPPLY12" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="5V" device=""/>
+<part name="SUPPLY13" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="5V" device=""/>
+<part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
+<attribute name="VOLTAGE" value="6v"/>
+</part>
+<part name="SUPPLY14" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="3.3V" device=""/>
+<part name="SUPPLY15" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="3.3V" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -1576,10 +1638,6 @@ enncoder.</text>
 <attribute name="NAME" x="68.58148125" y="93.984440625" size="2.54148125" layer="95" rot="R270"/>
 <attribute name="VALUE" x="76.193359375" y="99.06996875" size="2.54331875" layer="96" rot="R270"/>
 </instance>
-<instance part="P+2" gate="VCC" x="2.54" y="132.08" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="VALUE" x="0" y="129.54" size="1.778" layer="96" rot="R90" display="off"/>
-<attribute name="VOLTAGE" x="0" y="129.54" size="1.778" layer="96" rot="MR0"/>
-</instance>
 <instance part="P+3" gate="VCC" x="160.02" y="127" smashed="yes" grouprefs="MOTOR">
 <attribute name="VALUE" x="157.48" y="127" size="1.778" layer="96" rot="R180" display="off"/>
 <attribute name="VOLTAGE" x="157.48" y="124.46" size="1.778" layer="96" rot="MR0"/>
@@ -1610,34 +1668,15 @@ enncoder.</text>
 <attribute name="NAME" x="102.87" y="107.315" size="1.778" layer="95"/>
 <attribute name="VALUE" x="102.87" y="86.36" size="1.778" layer="96"/>
 </instance>
-<instance part="P+4" gate="VCC" x="55.88" y="134.62" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="VALUE" x="53.34" y="134.62" size="1.778" layer="96" rot="R180"/>
-</instance>
 <instance part="SUPPLY6" gate="GND" x="-50.8" y="111.76" smashed="yes" grouprefs="SNSR_GND">
 <attribute name="VALUE" x="-52.705" y="108.585" size="1.778" layer="96"/>
-</instance>
-<instance part="P+5" gate="VCC" x="132.08" y="124.46" smashed="yes" grouprefs="MOTOR">
-<attribute name="VALUE" x="129.54" y="121.92" size="1.778" layer="96" rot="R90" display="off"/>
-<attribute name="VOLTAGE" x="129.54" y="121.92" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="JP4" gate="A" x="99.06" y="53.34" smashed="yes" rot="R180" grouprefs="STM_PWR">
 <attribute name="NAME" x="100.33" y="60.325" size="1.778" layer="95"/>
 <attribute name="VALUE" x="110.49" y="45.72" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="P+6" gate="VCC" x="114.3" y="63.5" smashed="yes" grouprefs="STM_PWR">
-<attribute name="VALUE" x="111.76" y="60.96" size="1.778" layer="96" rot="R180" display="off"/>
-<attribute name="VOLTAGE" x="111.76" y="60.96" size="1.778" layer="96" rot="MR0"/>
-</instance>
-<instance part="P+7" gate="VCC" x="121.92" y="63.5" smashed="yes" grouprefs="STM_PWR">
-<attribute name="VALUE" x="119.38" y="60.96" size="1.778" layer="96" rot="R90" display="off"/>
-<attribute name="VOLTAGE" x="119.38" y="60.96" size="1.778" layer="96" rot="MR0"/>
-</instance>
 <instance part="SUPPLY7" gate="GND" x="114.3" y="43.18" smashed="yes" grouprefs="STM_PWR">
 <attribute name="VALUE" x="112.395" y="40.005" size="1.778" layer="96"/>
-</instance>
-<instance part="P+8" gate="VCC" x="7.62" y="53.34" smashed="yes" grouprefs="TEMP_SNSR">
-<attribute name="VALUE" x="5.08" y="50.8" size="1.778" layer="96" rot="R180" display="off"/>
-<attribute name="VOLTAGE" x="5.08" y="50.8" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="SUPPLY8" gate="GND" x="60.96" y="17.78" smashed="yes" grouprefs="TEMP_SNSR">
 <attribute name="VALUE" x="59.055" y="14.605" size="1.778" layer="96"/>
@@ -1651,6 +1690,25 @@ enncoder.</text>
 </instance>
 <instance part="SUPPLY10" gate="GND" x="17.78" y="73.66" smashed="yes" grouprefs="H-BRIDGE">
 <attribute name="VALUE" x="15.875" y="70.485" size="1.778" layer="96"/>
+</instance>
+<instance part="SUPPLY11" gate="G$1" x="132.08" y="119.38" smashed="yes">
+<attribute name="VALUE" x="132.08" y="122.174" size="1.778" layer="96" font="vector" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY12" gate="G$1" x="2.54" y="129.54" smashed="yes">
+<attribute name="VALUE" x="2.54" y="132.334" size="1.778" layer="96" font="vector" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY13" gate="G$1" x="121.92" y="66.04" smashed="yes" grouprefs="STM_PWR">
+<attribute name="VALUE" x="121.92" y="68.834" size="1.778" layer="96" font="vector" align="bottom-center"/>
+</instance>
+<instance part="P+2" gate="VCC" x="58.42" y="132.08" smashed="yes">
+<attribute name="VALUE" x="55.88" y="132.08" size="1.778" layer="96" rot="R180" display="off"/>
+<attribute name="VOLTAGE" x="55.88" y="129.54" size="1.778" layer="96" rot="MR0"/>
+</instance>
+<instance part="SUPPLY14" gate="G$1" x="7.62" y="53.34" smashed="yes" grouprefs="TEMP_SNSR">
+<attribute name="VALUE" x="7.62" y="56.134" size="1.778" layer="96" font="vector" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY15" gate="G$1" x="114.3" y="60.96" smashed="yes" grouprefs="STM_PWR">
+<attribute name="VALUE" x="114.3" y="63.754" size="1.778" layer="96" font="vector" align="bottom-center"/>
 </instance>
 </instances>
 <busses>
@@ -1672,58 +1730,6 @@ enncoder.</text>
 <junction x="149.86" y="119.38" grouprefs="MOTOR"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="VS"/>
-<pinref part="P+4" gate="VCC" pin="VCC"/>
-<wire x1="55.88" y1="132.08" x2="55.88" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-</segment>
-<segment>
-<pinref part="C3" gate="G$1" pin="2"/>
-<pinref part="P+2" gate="VCC" pin="VCC"/>
-<wire x1="2.54" y1="121.92" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<pinref part="U1" gate="G$1" pin="VSS"/>
-<wire x1="2.54" y1="124.46" x2="2.54" y2="129.54" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<wire x1="20.32" y1="124.46" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<junction x="2.54" y="124.46" grouprefs="H-BRIDGE"/>
-</segment>
-<segment>
-<pinref part="JP2" gate="A" pin="4"/>
-<wire x1="104.14" y1="96.52" x2="132.08" y2="96.52" width="0.1524" layer="91" grouprefs="MOTOR"/>
-<label x="109.22" y="96.52" size="1.778" layer="95" grouprefs="MOTOR"/>
-<wire x1="132.08" y1="96.52" x2="132.08" y2="121.92" width="0.1524" layer="91" grouprefs="MOTOR"/>
-<pinref part="P+5" gate="VCC" pin="VCC"/>
-</segment>
-<segment>
-<pinref part="JP4" gate="A" pin="3"/>
-<pinref part="P+6" gate="VCC" pin="VCC"/>
-<wire x1="101.6" y1="55.88" x2="114.3" y2="55.88" width="0.1524" layer="91" grouprefs="STM_PWR"/>
-<wire x1="114.3" y1="55.88" x2="114.3" y2="60.96" width="0.1524" layer="91" grouprefs="STM_PWR"/>
-</segment>
-<segment>
-<pinref part="JP4" gate="A" pin="2"/>
-<pinref part="P+7" gate="VCC" pin="VCC"/>
-<wire x1="101.6" y1="53.34" x2="121.92" y2="53.34" width="0.1524" layer="91" grouprefs="STM_PWR"/>
-<wire x1="121.92" y1="53.34" x2="121.92" y2="60.96" width="0.1524" layer="91" grouprefs="STM_PWR"/>
-</segment>
-<segment>
-<pinref part="R3" gate="G$1" pin="2"/>
-<pinref part="P+8" gate="VCC" pin="VCC"/>
-<wire x1="-5.08" y1="48.26" x2="-5.08" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<wire x1="-5.08" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="7.62" y1="48.26" x2="7.62" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<junction x="7.62" y="50.8" grouprefs="TEMP_SNSR"/>
-<pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="20.32" y1="48.26" x2="20.32" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<wire x1="20.32" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<pinref part="U2" gate="A" pin="VS+"/>
-<wire x1="60.96" y1="27.94" x2="58.42" y2="27.94" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<wire x1="60.96" y1="27.94" x2="60.96" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<wire x1="60.96" y1="50.8" x2="20.32" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
-<junction x="20.32" y="50.8" grouprefs="TEMP_SNSR"/>
-<pinref part="C4" gate="G$1" pin="1"/>
-<junction x="60.96" y="27.94" grouprefs="TEMP_SNSR"/>
-</segment>
-<segment>
 <pinref part="P+1" gate="VCC" pin="VCC"/>
 <pinref part="C1" gate="G$1" pin="+"/>
 <wire x1="-55.88" y1="25.4" x2="-55.88" y2="20.32" width="0.1524" layer="91" grouprefs="PWR_IN"/>
@@ -1731,6 +1737,12 @@ enncoder.</text>
 <wire x1="-55.88" y1="20.32" x2="-48.26" y2="20.32" width="0.1524" layer="91" grouprefs="PWR_IN"/>
 <wire x1="-48.26" y1="20.32" x2="-48.26" y2="12.7" width="0.1524" layer="91" grouprefs="PWR_IN"/>
 <junction x="-55.88" y="20.32" grouprefs="PWR_IN"/>
+</segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="VS"/>
+<pinref part="P+2" gate="VCC" pin="VCC"/>
+<wire x1="55.88" y1="124.46" x2="58.42" y2="124.46" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="124.46" x2="58.42" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -1976,9 +1988,9 @@ enncoder.</text>
 <segment>
 <pinref part="U2" gate="A" pin="OS"/>
 <pinref part="R2" gate="G$1" pin="2"/>
-<wire x1="22.86" y1="22.86" x2="7.62" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="22.86" x2="7.62" y2="27.94" width="0.1524" layer="91"/>
-<label x="15.24" y="22.86" size="1.778" layer="95"/>
+<wire x1="22.86" y1="22.86" x2="7.62" y2="22.86" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<wire x1="7.62" y1="22.86" x2="7.62" y2="27.94" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<label x="15.24" y="22.86" size="1.778" layer="95" grouprefs="TEMP_SNSR"/>
 </segment>
 <segment>
 <pinref part="JP3" gate="A" pin="6"/>
@@ -1990,14 +2002,66 @@ enncoder.</text>
 <segment>
 <pinref part="U2" gate="A" pin="SCL"/>
 <pinref part="R3" gate="G$1" pin="1"/>
-<wire x1="22.86" y1="12.7" x2="-5.08" y2="12.7" width="0.1524" layer="91"/>
-<wire x1="-5.08" y1="12.7" x2="-5.08" y2="27.94" width="0.1524" layer="91"/>
-<label x="12.7" y="12.7" size="1.778" layer="95"/>
+<wire x1="22.86" y1="12.7" x2="-5.08" y2="12.7" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<wire x1="-5.08" y1="12.7" x2="-5.08" y2="27.94" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<label x="12.7" y="12.7" size="1.778" layer="95" grouprefs="TEMP_SNSR"/>
 </segment>
 <segment>
 <pinref part="JP3" gate="A" pin="5"/>
 <wire x1="-55.88" y1="73.66" x2="-35.56" y2="73.66" width="0.1524" layer="91"/>
 <label x="-48.26" y="73.66" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="5V" class="0">
+<segment>
+<pinref part="C3" gate="G$1" pin="2"/>
+<wire x1="2.54" y1="121.92" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="VSS"/>
+<wire x1="2.54" y1="124.46" x2="2.54" y2="129.54" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="20.32" y1="124.46" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="2.54" y="124.46" grouprefs="H-BRIDGE"/>
+<pinref part="SUPPLY12" gate="G$1" pin="5V"/>
+</segment>
+<segment>
+<pinref part="JP2" gate="A" pin="4"/>
+<wire x1="104.14" y1="96.52" x2="132.08" y2="96.52" width="0.1524" layer="91" grouprefs="MOTOR"/>
+<label x="109.22" y="96.52" size="1.778" layer="95" grouprefs="MOTOR"/>
+<wire x1="132.08" y1="96.52" x2="132.08" y2="119.38" width="0.1524" layer="91" grouprefs="MOTOR"/>
+<pinref part="SUPPLY11" gate="G$1" pin="5V"/>
+</segment>
+<segment>
+<pinref part="JP4" gate="A" pin="2"/>
+<wire x1="101.6" y1="53.34" x2="121.92" y2="53.34" width="0.1524" layer="91" grouprefs="STM_PWR"/>
+<wire x1="121.92" y1="53.34" x2="121.92" y2="66.04" width="0.1524" layer="91" grouprefs="STM_PWR"/>
+<pinref part="SUPPLY13" gate="G$1" pin="5V"/>
+</segment>
+</net>
+<net name="3.3V" class="0">
+<segment>
+<pinref part="R3" gate="G$1" pin="2"/>
+<wire x1="-5.08" y1="48.26" x2="-5.08" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<wire x1="-5.08" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="7.62" y1="48.26" x2="7.62" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<junction x="7.62" y="50.8" grouprefs="TEMP_SNSR"/>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="20.32" y1="48.26" x2="20.32" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<wire x1="20.32" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<pinref part="U2" gate="A" pin="VS+"/>
+<wire x1="60.96" y1="27.94" x2="58.42" y2="27.94" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<wire x1="60.96" y1="27.94" x2="60.96" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<wire x1="60.96" y1="50.8" x2="20.32" y2="50.8" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+<junction x="20.32" y="50.8" grouprefs="TEMP_SNSR"/>
+<pinref part="C4" gate="G$1" pin="1"/>
+<junction x="60.96" y="27.94" grouprefs="TEMP_SNSR"/>
+<pinref part="SUPPLY14" gate="G$1" pin="3.3V"/>
+<wire x1="7.62" y1="50.8" x2="7.62" y2="53.34" width="0.1524" layer="91" grouprefs="TEMP_SNSR"/>
+</segment>
+<segment>
+<pinref part="JP4" gate="A" pin="3"/>
+<wire x1="101.6" y1="55.88" x2="114.3" y2="55.88" width="0.1524" layer="91" grouprefs="STM_PWR"/>
+<wire x1="114.3" y1="55.88" x2="114.3" y2="60.96" width="0.1524" layer="91" grouprefs="STM_PWR"/>
+<pinref part="SUPPLY15" gate="G$1" pin="3.3V"/>
 </segment>
 </net>
 </nets>

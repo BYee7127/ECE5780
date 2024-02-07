@@ -966,20 +966,20 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/REA010M2CBK-0
 <text x="-12.7" y="20.32" size="1.778" layer="95">&gt;NAME</text>
 <text x="-12.7" y="-20.32" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="SENSE_A" x="17.78" y="-5.08" length="middle" direction="pas" rot="R180"/>
-<pin name="OUT1" x="17.78" y="12.7" length="middle" direction="out" rot="R180"/>
+<pin name="OUT1" x="17.78" y="10.16" length="middle" direction="out" rot="R180"/>
 <pin name="VS" x="17.78" y="15.24" length="middle" direction="pwr" rot="R180"/>
-<pin name="IN1" x="-17.78" y="0" length="middle" direction="in"/>
-<pin name="ENA" x="-17.78" y="7.62" length="middle" direction="in"/>
+<pin name="IN1" x="-17.78" y="5.08" length="middle" direction="in"/>
+<pin name="ENA" x="-17.78" y="-10.16" length="middle" direction="in"/>
 <pin name="GND" x="17.78" y="-12.7" length="middle" direction="pwr" rot="R180"/>
 <pin name="VSS" x="-17.78" y="15.24" length="middle" direction="in"/>
 <pin name="SENSE_B" x="17.78" y="-7.62" length="middle" direction="pas" rot="R180"/>
 <pin name="IN2" x="-17.78" y="-2.54" length="middle" direction="in"/>
-<pin name="OUT2" x="17.78" y="10.16" length="middle" direction="out" rot="R180"/>
+<pin name="OUT2" x="17.78" y="2.54" length="middle" direction="out" rot="R180"/>
 <pin name="IN3" x="-17.78" y="-5.08" length="middle" direction="in"/>
-<pin name="ENB" x="-17.78" y="5.08" length="middle" direction="in"/>
-<pin name="OUT3" x="17.78" y="2.54" length="middle" direction="out" rot="R180"/>
-<pin name="OUT4" x="17.78" y="0" length="middle" direction="out" rot="R180"/>
-<pin name="IN4" x="-17.78" y="-7.62" length="middle" direction="in"/>
+<pin name="ENB" x="-17.78" y="-12.7" length="middle" direction="in"/>
+<pin name="OUT3" x="17.78" y="0" length="middle" direction="out" rot="R180"/>
+<pin name="OUT4" x="17.78" y="7.62" length="middle" direction="out" rot="R180"/>
+<pin name="IN4" x="-17.78" y="2.54" length="middle" direction="in"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -1439,7 +1439,7 @@ DIN A4, landscape with location and doc. field</description>
 <part name="J1" library="CON-SOCJ-2155" deviceset="CON-SOCJ-2155" device=""/>
 <part name="C2" library="C1206C104K5RAC7800" deviceset="C1206C104K5RAC7800" device="" value="100nF"/>
 <part name="U1" library="L298N" deviceset="L298N" device="" value="L298N"/>
-<part name="U2" library="LM75AIMX_NOPB" deviceset="LM75AIMX/NOPB" device="">
+<part name="U2" library="LM75AIMX_NOPB" deviceset="LM75AIMX/NOPB" device="" value="LM75AIMX">
 <attribute name="COMPONENT" value="TMP_SNSR"/>
 </part>
 <part name="R1" library="RC1206JR-0710KL" deviceset="RC1206JR-0710KL" device=""/>
@@ -1490,18 +1490,17 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="7.62" y="50.8" size="1.778" layer="95"/>
 <attribute name="VALUE" x="7.62" y="41.402" size="1.778" layer="96" align="top-left"/>
 </instance>
-<instance part="C2" gate="G$1" x="154.94" y="111.76" smashed="yes" rot="R270" grouprefs="MOTOR">
-<attribute name="NAME" x="158.75093125" y="111.76" size="1.77843125" layer="95" rot="R270"/>
-<attribute name="VALUE" x="149.85151875" y="111.76" size="1.78096875" layer="96" rot="R270"/>
+<instance part="C2" gate="G$1" x="154.94" y="114.3" smashed="yes" rot="R270" grouprefs="MOTOR">
+<attribute name="NAME" x="158.75093125" y="114.3" size="1.77843125" layer="95" rot="R270"/>
+<attribute name="VALUE" x="149.85151875" y="114.3" size="1.78096875" layer="96" rot="R270"/>
 </instance>
-<instance part="U1" gate="G$1" x="35.56" y="106.68" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="NAME" x="33.02" y="124.46" size="1.778" layer="95"/>
-<attribute name="VALUE" x="30.48" y="88.9" size="1.778" layer="96"/>
+<instance part="U1" gate="G$1" x="38.1" y="109.22" smashed="yes" grouprefs="H-BRIDGE">
+<attribute name="NAME" x="35.56" y="127" size="1.778" layer="95"/>
+<attribute name="VALUE" x="33.02" y="91.44" size="1.778" layer="96"/>
 </instance>
 <instance part="U2" gate="A" x="-40.64" y="7.62" smashed="yes">
-<attribute name="NAME" x="-53.34" y="26.4" size="2.0828" layer="95" ratio="10" rot="SR0"/>
-<attribute name="VALUE" x="-53.34" y="-14.16" size="2.0828" layer="96" ratio="10" rot="SR0" display="off"/>
-<attribute name="COMPONENT" x="-40.64" y="-12.7" size="1.778" layer="96"/>
+<attribute name="NAME" x="-43.18" y="26.4" size="2.0828" layer="95" ratio="10" rot="SR0"/>
+<attribute name="VALUE" x="-48.26" y="-14.16" size="2.0828" layer="96" ratio="10" rot="SR0"/>
 </instance>
 <instance part="R1" gate="G$1" x="55.88" y="5.08" smashed="yes">
 <attribute name="NAME" x="48.255559375" y="7.62148125" size="2.54148125" layer="95"/>
@@ -1519,7 +1518,7 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="129.535559375" y="7.62148125" size="2.54148125" layer="95"/>
 <attribute name="VALUE" x="129.53003125" y="-0.006640625" size="2.54331875" layer="96"/>
 </instance>
-<instance part="C3" gate="G$1" x="2.54" y="116.84" smashed="yes" rot="R90">
+<instance part="C3" gate="G$1" x="2.54" y="116.84" smashed="yes" rot="R90" grouprefs="H-BRIDGE">
 <attribute name="NAME" x="0" y="118.10906875" size="1.77843125" layer="95" rot="R180"/>
 <attribute name="VALUE" x="7.62848125" y="116.84" size="1.78096875" layer="96" rot="R90"/>
 </instance>
@@ -1543,27 +1542,27 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="142.24" y="88.9" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="148.59" y="88.9" size="1.778" layer="96" rot="R90" display="off"/>
 </instance>
-<instance part="R5" gate="G$1" x="73.66" y="88.9" smashed="yes" rot="R270" grouprefs="H-BRIDGE">
-<attribute name="NAME" x="68.58148125" y="91.444440625" size="2.54148125" layer="95" rot="R270"/>
-<attribute name="VALUE" x="76.193359375" y="96.52996875" size="2.54331875" layer="96" rot="R270"/>
+<instance part="R5" gate="G$1" x="73.66" y="91.44" smashed="yes" rot="R270" grouprefs="H-BRIDGE">
+<attribute name="NAME" x="68.58148125" y="93.984440625" size="2.54148125" layer="95" rot="R270"/>
+<attribute name="VALUE" x="76.193359375" y="99.06996875" size="2.54331875" layer="96" rot="R270"/>
 </instance>
-<instance part="P+1" gate="VCC" x="-15.24" y="35.56" smashed="yes">
-<attribute name="VALUE" x="-17.78" y="33.02" size="1.778" layer="96" rot="R180" display="off"/>
-<attribute name="VOLTAGE" x="-17.78" y="33.02" size="1.778" layer="96" rot="MR0"/>
+<instance part="P+1" gate="VCC" x="-20.32" y="35.56" smashed="yes">
+<attribute name="VALUE" x="-22.86" y="33.02" size="1.778" layer="96" rot="R180" display="off"/>
+<attribute name="VOLTAGE" x="-22.86" y="33.02" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="P+2" gate="VCC" x="0" y="129.54" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="VALUE" x="-2.54" y="127" size="1.778" layer="96" rot="R90" display="off"/>
-<attribute name="VOLTAGE" x="-2.54" y="127" size="1.778" layer="96" rot="MR0"/>
+<instance part="P+2" gate="VCC" x="2.54" y="132.08" smashed="yes" grouprefs="H-BRIDGE">
+<attribute name="VALUE" x="0" y="129.54" size="1.778" layer="96" rot="R90" display="off"/>
+<attribute name="VOLTAGE" x="0" y="129.54" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="P+3" gate="VCC" x="154.94" y="127" smashed="yes" grouprefs="MOTOR">
 <attribute name="VALUE" x="152.4" y="127" size="1.778" layer="96" rot="R180" display="off"/>
 <attribute name="VOLTAGE" x="152.4" y="124.46" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="SUPPLY1" gate="GND" x="-58.42" y="63.5" smashed="yes">
-<attribute name="VALUE" x="-60.325" y="60.325" size="1.778" layer="96"/>
+<instance part="SUPPLY1" gate="GND" x="154.94" y="106.68" smashed="yes">
+<attribute name="VALUE" x="153.035" y="103.505" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY2" gate="GND" x="-50.8" y="71.12" smashed="yes">
-<attribute name="VALUE" x="-52.705" y="67.945" size="1.778" layer="96"/>
+<instance part="SUPPLY2" gate="GND" x="2.54" y="111.76" smashed="yes" grouprefs="H-BRIDGE">
+<attribute name="VALUE" x="0.635" y="108.585" size="1.778" layer="96"/>
 </instance>
 <instance part="SUPPLY3" gate="GND" x="139.7" y="83.82" smashed="yes" grouprefs="MOTOR">
 <attribute name="VALUE" x="137.795" y="80.645" size="1.778" layer="96"/>
@@ -1572,23 +1571,21 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="NAME" x="-26.67" y="79.375" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-26.67" y="53.34" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY4" gate="GND" x="10.16" y="-5.08" smashed="yes">
-<attribute name="VALUE" x="8.255" y="-8.255" size="1.778" layer="96"/>
+<instance part="SUPPLY4" gate="GND" x="-20.32" y="-17.78" smashed="yes">
+<attribute name="VALUE" x="-22.225" y="-20.955" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY5" gate="GND" x="58.42" y="73.66" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="VALUE" x="56.515" y="70.485" size="1.778" layer="96"/>
+<instance part="SUPPLY5" gate="GND" x="60.96" y="76.2" smashed="yes" grouprefs="H-BRIDGE">
+<attribute name="VALUE" x="59.055" y="73.025" size="1.778" layer="96"/>
 </instance>
 <instance part="FRAME1" gate="G$1" x="-81.28" y="-27.94" smashed="yes">
-<attribute name="DRAWING_NAME" x="135.89" y="-12.7" size="2.54" layer="94"/>
-<attribute name="LAST_DATE_TIME" x="135.89" y="-17.78" size="2.286" layer="94"/>
 <attribute name="SHEET" x="149.225" y="-22.86" size="2.54" layer="94"/>
 </instance>
 <instance part="JP2" gate="A" x="101.6" y="96.52" smashed="yes" rot="MR0" grouprefs="MOTOR">
 <attribute name="NAME" x="102.87" y="107.315" size="1.778" layer="95"/>
 <attribute name="VALUE" x="102.87" y="86.36" size="1.778" layer="96"/>
 </instance>
-<instance part="P+4" gate="VCC" x="53.34" y="132.08" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="VALUE" x="50.8" y="132.08" size="1.778" layer="96" rot="R180"/>
+<instance part="P+4" gate="VCC" x="55.88" y="134.62" smashed="yes" grouprefs="H-BRIDGE">
+<attribute name="VALUE" x="53.34" y="134.62" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="C5" gate="G$1" x="58.42" y="48.26" smashed="yes">
 <attribute name="NAME" x="58.42" y="52.07093125" size="1.77843125" layer="95"/>
@@ -1601,16 +1598,16 @@ DIN A4, landscape with location and doc. field</description>
 <net name="VCC" class="0">
 <segment>
 <pinref part="P+1" gate="VCC" pin="VCC"/>
-<wire x1="-12.7" y1="20.32" x2="-15.24" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="22.86" x2="-20.32" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="U2" gate="A" pin="VS+"/>
-<wire x1="-12.7" y1="20.32" x2="-22.86" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="22.86" x2="-22.86" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C2" gate="G$1" pin="1"/>
 <pinref part="P+3" gate="VCC" pin="VCC"/>
 <wire x1="154.94" y1="124.46" x2="154.94" y2="119.38" width="0.1524" layer="91" grouprefs="MOTOR"/>
 <pinref part="D1" gate="G$1" pin="K"/>
-<wire x1="154.94" y1="119.38" x2="154.94" y2="114.3" width="0.1524" layer="91" grouprefs="MOTOR"/>
+<wire x1="154.94" y1="119.38" x2="154.94" y2="116.84" width="0.1524" layer="91" grouprefs="MOTOR"/>
 <wire x1="134.62" y1="116.84" x2="134.62" y2="119.38" width="0.1524" layer="91" grouprefs="MOTOR"/>
 <wire x1="134.62" y1="119.38" x2="144.78" y2="119.38" width="0.1524" layer="91" grouprefs="MOTOR"/>
 <junction x="154.94" y="119.38" grouprefs="MOTOR"/>
@@ -1622,24 +1619,24 @@ DIN A4, landscape with location and doc. field</description>
 <segment>
 <pinref part="U1" gate="G$1" pin="VS"/>
 <pinref part="P+4" gate="VCC" pin="VCC"/>
-<wire x1="53.34" y1="129.54" x2="53.34" y2="121.92" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="55.88" y1="132.08" x2="55.88" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="VSS"/>
 <pinref part="C3" gate="G$1" pin="2"/>
-<wire x1="17.78" y1="121.92" x2="2.54" y2="121.92" width="0.1524" layer="91"/>
 <pinref part="P+2" gate="VCC" pin="VCC"/>
-<wire x1="2.54" y1="121.92" x2="0" y2="121.92" width="0.1524" layer="91"/>
-<wire x1="0" y1="121.92" x2="0" y2="127" width="0.1524" layer="91"/>
-<junction x="2.54" y="121.92"/>
+<wire x1="2.54" y1="121.92" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="VSS"/>
+<wire x1="2.54" y1="124.46" x2="2.54" y2="129.54" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="20.32" y1="124.46" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="2.54" y="124.46" grouprefs="H-BRIDGE"/>
 </segment>
 </net>
 <net name="GND" class="0">
 <segment>
 <pinref part="U2" gate="A" pin="GND"/>
 <pinref part="SUPPLY4" gate="GND" pin="GND"/>
-<wire x1="10.16" y1="-2.54" x2="-10.16" y2="-10.16" width="0.1524" layer="91"/>
-<wire x1="-10.16" y1="-10.16" x2="-22.86" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="-15.24" x2="-20.32" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="-20.32" y1="-7.62" x2="-22.86" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="D2" gate="G$1" pin="A"/>
@@ -1656,20 +1653,24 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="129.54" y1="99.06" x2="129.54" y2="86.36" width="0.1524" layer="91" grouprefs="MOTOR"/>
 <wire x1="129.54" y1="86.36" x2="134.62" y2="86.36" width="0.1524" layer="91" grouprefs="MOTOR"/>
 <junction x="134.62" y="86.36" grouprefs="MOTOR"/>
-<pinref part="C2" gate="G$1" pin="2"/>
-<wire x1="154.94" y1="106.68" x2="154.94" y2="86.36" width="0.1524" layer="91" grouprefs="MOTOR"/>
-<wire x1="154.94" y1="86.36" x2="144.78" y2="86.36" width="0.1524" layer="91" grouprefs="MOTOR"/>
-<junction x="144.78" y="86.36" grouprefs="MOTOR"/>
 </segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="GND"/>
 <pinref part="SUPPLY5" gate="GND" pin="GND"/>
-<wire x1="53.34" y1="93.98" x2="58.42" y2="93.98" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<wire x1="58.42" y1="93.98" x2="58.42" y2="78.74" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="55.88" y1="96.52" x2="60.96" y2="96.52" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="60.96" y1="96.52" x2="60.96" y2="81.28" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
 <pinref part="R5" gate="G$1" pin="2"/>
-<wire x1="58.42" y1="78.74" x2="58.42" y2="76.2" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<wire x1="73.66" y1="78.74" x2="58.42" y2="78.74" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<junction x="58.42" y="78.74" grouprefs="H-BRIDGE"/>
+<wire x1="60.96" y1="81.28" x2="60.96" y2="78.74" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="73.66" y1="81.28" x2="60.96" y2="81.28" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="60.96" y="81.28" grouprefs="H-BRIDGE"/>
+</segment>
+<segment>
+<pinref part="C3" gate="G$1" pin="1"/>
+<pinref part="SUPPLY2" gate="GND" pin="GND"/>
+</segment>
+<segment>
+<pinref part="C2" gate="G$1" pin="2"/>
+<pinref part="SUPPLY1" gate="GND" pin="GND"/>
 </segment>
 </net>
 <net name="RED_MTRPWR" class="0">
@@ -1684,9 +1685,14 @@ DIN A4, landscape with location and doc. field</description>
 <junction x="134.62" y="104.14" grouprefs="MOTOR"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="OUT3"/>
-<wire x1="53.34" y1="109.22" x2="71.12" y2="109.22" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="55.88" y="109.22" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="OUT1"/>
+<wire x1="55.88" y1="119.38" x2="58.42" y2="119.38" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="OUT4"/>
+<wire x1="55.88" y1="116.84" x2="58.42" y2="116.84" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<label x="60.96" y="116.84" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
+<wire x1="58.42" y1="116.84" x2="73.66" y2="116.84" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="58.42" y1="119.38" x2="58.42" y2="116.84" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="58.42" y="116.84" grouprefs="H-BRIDGE"/>
 </segment>
 </net>
 <net name="BLK_MTRPWR" class="0">
@@ -1701,9 +1707,14 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="144.78" y1="101.6" x2="144.78" y2="104.14" width="0.1524" layer="91" grouprefs="MOTOR"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="OUT4"/>
-<wire x1="53.34" y1="106.68" x2="71.12" y2="106.68" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="55.88" y="106.68" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="OUT3"/>
+<wire x1="55.88" y1="109.22" x2="58.42" y2="109.22" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<label x="60.96" y="109.22" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="OUT2"/>
+<wire x1="58.42" y1="109.22" x2="73.66" y2="109.22" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="55.88" y1="111.76" x2="58.42" y2="111.76" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="58.42" y1="111.76" x2="58.42" y2="109.22" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="58.42" y="109.22" grouprefs="H-BRIDGE"/>
 </segment>
 </net>
 <net name="ENC_VCC" class="0">
@@ -1727,77 +1738,53 @@ DIN A4, landscape with location and doc. field</description>
 <label x="109.22" y="91.44" size="1.778" layer="95" grouprefs="MOTOR"/>
 </segment>
 </net>
-<net name="SENSE_A" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="SENSE_A"/>
-<wire x1="53.34" y1="101.6" x2="71.12" y2="101.6" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="55.88" y="101.6" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
-</segment>
-</net>
-<net name="OUT1" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="OUT1"/>
-<wire x1="53.34" y1="119.38" x2="71.12" y2="119.38" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="68.58" y="119.38" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
-</segment>
-</net>
 <net name="IN1" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="IN1"/>
-<wire x1="17.78" y1="106.68" x2="0" y2="106.68" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="2.54" y="106.68" size="1.778" layer="95" rot="MR0" grouprefs="H-BRIDGE"/>
+<wire x1="20.32" y1="114.3" x2="17.78" y2="114.3" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="IN4"/>
+<wire x1="20.32" y1="111.76" x2="17.78" y2="111.76" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="17.78" y1="111.76" x2="10.16" y2="111.76" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="17.78" y1="114.3" x2="17.78" y2="111.76" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="17.78" y="111.76" grouprefs="H-BRIDGE"/>
+<label x="12.7" y="111.76" size="1.778" layer="95" grouprefs="H-BRIDGE"/>
 </segment>
 </net>
-<net name="ENA" class="0">
+<net name="ENABLE" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="ENA"/>
-<wire x1="17.78" y1="114.3" x2="7.62" y2="114.3" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="15.24" y="114.3" size="1.778" layer="95" rot="MR0" grouprefs="H-BRIDGE"/>
-<wire x1="7.62" y1="114.3" x2="7.62" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="111.76" x2="-5.08" y2="111.76" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="SENSE_B" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="SENSE_B"/>
-<wire x1="53.34" y1="99.06" x2="73.66" y2="99.06" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="55.88" y="99.06" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
-<pinref part="R5" gate="G$1" pin="1"/>
+<wire x1="20.32" y1="99.06" x2="17.78" y2="99.06" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="17.78" y1="99.06" x2="17.78" y2="96.52" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="17.78" y1="96.52" x2="5.08" y2="96.52" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="ENB"/>
+<wire x1="20.32" y1="96.52" x2="17.78" y2="96.52" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="17.78" y="96.52" grouprefs="H-BRIDGE"/>
+<label x="7.62" y="96.52" size="1.778" layer="95" grouprefs="H-BRIDGE"/>
 </segment>
 </net>
 <net name="IN2" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="IN2"/>
-<wire x1="17.78" y1="104.14" x2="0" y2="104.14" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="2.54" y="104.14" size="1.778" layer="95" rot="MR0" grouprefs="H-BRIDGE"/>
-</segment>
-</net>
-<net name="OUT2" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="OUT2"/>
-<wire x1="53.34" y1="116.84" x2="71.12" y2="116.84" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="68.58" y="116.84" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
-</segment>
-</net>
-<net name="INPUT_1" class="0">
-<segment>
 <pinref part="U1" gate="G$1" pin="IN3"/>
-<wire x1="17.78" y1="101.6" x2="0" y2="101.6" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="15.24" y="101.6" size="1.778" layer="95" rot="MR0" grouprefs="H-BRIDGE"/>
+<wire x1="20.32" y1="104.14" x2="17.78" y2="104.14" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="IN2"/>
+<wire x1="17.78" y1="104.14" x2="10.16" y2="104.14" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="20.32" y1="106.68" x2="17.78" y2="106.68" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="17.78" y1="106.68" x2="17.78" y2="104.14" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="17.78" y="104.14" grouprefs="H-BRIDGE"/>
+<label x="12.7" y="104.14" size="1.778" layer="95" grouprefs="H-BRIDGE"/>
 </segment>
 </net>
-<net name="ENB" class="0">
+<net name="SENSOR" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="ENB"/>
-<wire x1="17.78" y1="111.76" x2="7.62" y2="111.76" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="15.24" y="111.76" size="1.778" layer="95" rot="MR0" grouprefs="H-BRIDGE"/>
-</segment>
-</net>
-<net name="INPUT_2" class="0">
-<segment>
-<pinref part="U1" gate="G$1" pin="IN4"/>
-<wire x1="17.78" y1="99.06" x2="0" y2="99.06" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<label x="15.24" y="99.06" size="1.778" layer="95" rot="MR0" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="SENSE_A"/>
+<wire x1="55.88" y1="104.14" x2="58.42" y2="104.14" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="SENSE_B"/>
+<wire x1="55.88" y1="101.6" x2="58.42" y2="101.6" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<label x="60.96" y="101.6" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="H-BRIDGE"/>
+<pinref part="R5" gate="G$1" pin="1"/>
+<wire x1="58.42" y1="101.6" x2="73.66" y2="101.6" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="58.42" y1="104.14" x2="58.42" y2="101.6" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="58.42" y="101.6" grouprefs="H-BRIDGE"/>
 </segment>
 </net>
 </nets>
