@@ -135,6 +135,12 @@
 <layer number="153" name="FabDoc1" color="7" fill="1" visible="no" active="no"/>
 <layer number="154" name="FabDoc2" color="7" fill="1" visible="no" active="no"/>
 <layer number="155" name="FabDoc3" color="7" fill="1" visible="no" active="no"/>
+<layer number="156" name="gesam-Maß" color="1" fill="7" visible="no" active="no"/>
+<layer number="157" name="FaceMchng" color="3" fill="1" visible="no" active="no"/>
+<layer number="158" name="FaceMMeas" color="3" fill="1" visible="no" active="no"/>
+<layer number="159" name="Geh-Bear2" color="1" fill="7" visible="no" active="no"/>
+<layer number="160" name="Topologie" color="9" fill="1" visible="no" active="no"/>
+<layer number="161" name="tomplace2" color="7" fill="1" visible="no" active="no"/>
 <layer number="166" name="AntennaArea" color="7" fill="1" visible="no" active="no"/>
 <layer number="168" name="4mmHeightArea" color="7" fill="1" visible="no" active="no"/>
 <layer number="191" name="mNets" color="7" fill="1" visible="no" active="no"/>
@@ -182,6 +188,7 @@
 <layer number="249" name="Edge" color="7" fill="1" visible="no" active="no"/>
 <layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
 <layer number="251" name="SMDround" color="12" fill="11" visible="no" active="no"/>
+<layer number="252" name="BR-BS" color="7" fill="1" visible="no" active="no"/>
 <layer number="253" name="Extra" color="7" fill="1" visible="no" active="no"/>
 <layer number="254" name="cooling" color="7" fill="1" visible="no" active="no"/>
 <layer number="255" name="routoute" color="7" fill="1" visible="no" active="no"/>
@@ -1419,6 +1426,69 @@ DIN A4, landscape with location and doc. field</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="SparkFun-PowerSymbols" urn="urn:adsk.eagle:library:530">
+<description>&lt;h3&gt;SparkFun Power Symbols&lt;/h3&gt;
+This library contains power, ground, and voltage-supply symbols.
+&lt;br&gt;
+&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+&lt;br&gt;
+&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;
+&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="5V" urn="urn:adsk.eagle:symbol:39412/2" library_version="2">
+<description>&lt;h3&gt;5V Voltage Supply&lt;/h3&gt;</description>
+<wire x1="0.762" y1="1.27" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-0.762" y2="1.27" width="0.254" layer="94"/>
+<pin name="5V" x="0" y="0" visible="off" length="short" direction="sup" rot="R90"/>
+<text x="0" y="2.794" size="1.778" layer="96" font="vector" align="bottom-center">&gt;VALUE</text>
+</symbol>
+<symbol name="VCCIO" urn="urn:adsk.eagle:symbol:39421/2" library_version="2">
+<description>&lt;h3&gt;VCC I/O Voltage Supply&lt;/h3&gt;</description>
+<wire x1="0.762" y1="1.27" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-0.762" y2="1.27" width="0.254" layer="94"/>
+<pin name="VCCIO" x="0" y="0" visible="off" length="short" direction="sup" rot="R90"/>
+<text x="0" y="2.794" size="1.778" layer="96" font="vector" align="bottom-center">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="5V" urn="urn:adsk.eagle:component:39433/2" prefix="SUPPLY" library_version="2">
+<description>&lt;h3&gt;5V Supply Symbol&lt;/h3&gt;
+&lt;p&gt;Power supply symbol for a specifically-stated 5V source.&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="5V" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="VCCIO" urn="urn:adsk.eagle:component:39451/2" prefix="SUPPLY" library_version="2">
+<description>&lt;h3&gt;VCC I/O Supply&lt;/h3&gt;
+&lt;p&gt;Power supply for a chip's input and output pins.&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="VCCIO" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -1458,9 +1528,6 @@ DIN A4, landscape with location and doc. field</description>
 <part name="D3" library="RS2AA_R3G" deviceset="RS2AA_R3G" device=""/>
 <part name="D4" library="RS2AA_R3G" deviceset="RS2AA_R3G" device=""/>
 <part name="R5" library="RL1206FR-070R04L" deviceset="RL1206FR-070R04L" device="" value="CSR 0.04"/>
-<part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
-<attribute name="VOLTAGE" value="5v"/>
-</part>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device="">
 <attribute name="VOLTAGE" value="6v"/>
 </part>
@@ -1494,6 +1561,10 @@ DIN A4, landscape with location and doc. field</description>
 </part>
 <part name="SUPPLY9" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY10" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
+<part name="SUPPLY11" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="5V" device=""/>
+<part name="SUPPLY12" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="5V" device=""/>
+<part name="SUPPLY13" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="5V" device=""/>
+<part name="SUPPLY14" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="VCCIO" device="" value="6v"/>
 </parts>
 <sheets>
 <sheet>
@@ -1576,10 +1647,6 @@ enncoder.</text>
 <attribute name="NAME" x="68.58148125" y="93.984440625" size="2.54148125" layer="95" rot="R270"/>
 <attribute name="VALUE" x="76.193359375" y="99.06996875" size="2.54331875" layer="96" rot="R270"/>
 </instance>
-<instance part="P+2" gate="VCC" x="2.54" y="132.08" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="VALUE" x="0" y="129.54" size="1.778" layer="96" rot="R90" display="off"/>
-<attribute name="VOLTAGE" x="0" y="129.54" size="1.778" layer="96" rot="MR0"/>
-</instance>
 <instance part="P+3" gate="VCC" x="160.02" y="127" smashed="yes" grouprefs="MOTOR">
 <attribute name="VALUE" x="157.48" y="127" size="1.778" layer="96" rot="R180" display="off"/>
 <attribute name="VOLTAGE" x="157.48" y="124.46" size="1.778" layer="96" rot="MR0"/>
@@ -1610,8 +1677,8 @@ enncoder.</text>
 <attribute name="NAME" x="102.87" y="107.315" size="1.778" layer="95"/>
 <attribute name="VALUE" x="102.87" y="86.36" size="1.778" layer="96"/>
 </instance>
-<instance part="P+4" gate="VCC" x="55.88" y="134.62" smashed="yes" grouprefs="H-BRIDGE">
-<attribute name="VALUE" x="53.34" y="134.62" size="1.778" layer="96" rot="R180"/>
+<instance part="P+4" gate="VCC" x="58.42" y="134.62" smashed="yes" grouprefs="H-BRIDGE">
+<attribute name="VALUE" x="55.88" y="134.62" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="SUPPLY6" gate="GND" x="-50.8" y="111.76" smashed="yes" grouprefs="SNSR_GND">
 <attribute name="VALUE" x="-52.705" y="108.585" size="1.778" layer="96"/>
@@ -1652,6 +1719,16 @@ enncoder.</text>
 <instance part="SUPPLY10" gate="GND" x="17.78" y="73.66" smashed="yes" grouprefs="H-BRIDGE">
 <attribute name="VALUE" x="15.875" y="70.485" size="1.778" layer="96"/>
 </instance>
+<instance part="SUPPLY11" gate="G$1" x="116.84" y="121.92" smashed="yes">
+<attribute name="VALUE" x="116.84" y="124.714" size="1.778" layer="96" font="vector" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY12" gate="G$1" x="2.54" y="129.54" smashed="yes">
+<attribute name="VALUE" x="2.54" y="132.334" size="1.778" layer="96" font="vector" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY13" gate="G$1" x="127" y="58.42" smashed="yes">
+<attribute name="VALUE" x="127" y="61.214" size="1.778" layer="96" font="vector" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY14" gate="G$1" x="63.5" y="129.54" smashed="yes"/>
 </instances>
 <busses>
 </busses>
@@ -1674,16 +1751,7 @@ enncoder.</text>
 <segment>
 <pinref part="U1" gate="G$1" pin="VS"/>
 <pinref part="P+4" gate="VCC" pin="VCC"/>
-<wire x1="55.88" y1="132.08" x2="55.88" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-</segment>
-<segment>
-<pinref part="C3" gate="G$1" pin="2"/>
-<pinref part="P+2" gate="VCC" pin="VCC"/>
-<wire x1="2.54" y1="121.92" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<pinref part="U1" gate="G$1" pin="VSS"/>
-<wire x1="2.54" y1="124.46" x2="2.54" y2="129.54" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<wire x1="20.32" y1="124.46" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
-<junction x="2.54" y="124.46" grouprefs="H-BRIDGE"/>
+<wire x1="58.42" y1="132.08" x2="55.88" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
 </segment>
 <segment>
 <pinref part="JP2" gate="A" pin="4"/>
@@ -1998,6 +2066,17 @@ enncoder.</text>
 <pinref part="JP3" gate="A" pin="5"/>
 <wire x1="-55.88" y1="73.66" x2="-35.56" y2="73.66" width="0.1524" layer="91"/>
 <label x="-48.26" y="73.66" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="5V" class="0">
+<segment>
+<pinref part="C3" gate="G$1" pin="2"/>
+<wire x1="2.54" y1="121.92" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<pinref part="U1" gate="G$1" pin="VSS"/>
+<wire x1="2.54" y1="124.46" x2="2.54" y2="129.54" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<wire x1="20.32" y1="124.46" x2="2.54" y2="124.46" width="0.1524" layer="91" grouprefs="H-BRIDGE"/>
+<junction x="2.54" y="124.46" grouprefs="H-BRIDGE"/>
+<pinref part="SUPPLY12" gate="G$1" pin="5V"/>
 </segment>
 </net>
 </nets>

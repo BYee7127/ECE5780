@@ -1503,8 +1503,9 @@ temperature sensor, L298N H-Bridge,
 and a STM-Discovery microcontroller. 
 DC motor is a 6V and outfitted with an 
 enncoder.</text>
-<text x="134.62" y="-7.62" size="1.778" layer="91">Beverly Yee</text>
-<text x="134.62" y="-17.78" size="1.778" layer="91">2024-JAN-19</text>
+<text x="137.16" y="-7.62" size="2.54" layer="91">Beverly Yee u0770041</text>
+<text x="137.16" y="-17.78" size="2.54" layer="91">2024-JAN-19</text>
+<text x="137.16" y="-12.7" size="2.54" layer="91">ECE5780 - SP2024</text>
 </plain>
 <instances>
 <instance part="C1" gate="G$1" x="-55.88" y="25.4" smashed="yes" rot="R270" grouprefs="PWR_IN">

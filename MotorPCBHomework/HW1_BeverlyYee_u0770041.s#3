@@ -1901,9 +1901,9 @@ enncoder.</text>
 <label x="12.7" y="111.76" size="1.778" layer="95" grouprefs="H-BRIDGE"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="2"/>
-<wire x1="-55.88" y1="81.28" x2="-35.56" y2="81.28" width="0.1524" layer="91" grouprefs="DISCOVERY_I/O"/>
-<label x="-48.26" y="81.28" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="DISCOVERY_I/O"/>
+<pinref part="JP3" gate="A" pin="3"/>
+<wire x1="-55.88" y1="78.74" x2="-35.56" y2="78.74" width="0.1524" layer="91"/>
+<label x="-48.26" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ENABLE" class="0">
@@ -1936,9 +1936,9 @@ enncoder.</text>
 <label x="12.7" y="104.14" size="1.778" layer="95" grouprefs="H-BRIDGE"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="3"/>
-<wire x1="-55.88" y1="78.74" x2="-35.56" y2="78.74" width="0.1524" layer="91" grouprefs="DISCOVERY_I/O"/>
-<label x="-48.26" y="78.74" size="1.778" layer="95" rot="MR0" align="bottom-right" grouprefs="DISCOVERY_I/O"/>
+<pinref part="JP3" gate="A" pin="2"/>
+<wire x1="-55.88" y1="81.28" x2="-35.56" y2="81.28" width="0.1524" layer="91"/>
+<label x="-48.26" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SENSOR" class="0">
@@ -2003,6 +2003,15 @@ enncoder.</text>
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="104,1,55.88,124.46,U1,VS,VCC,,,"/>
+<approved hash="104,1,58.42,27.94,U2,VS+,VCC,,,"/>
+<approved hash="206,1,55.88,109.22,BLK_MTRPWR,,,,,"/>
+<approved hash="206,1,55.88,111.76,BLK_MTRPWR,,,,,"/>
+<approved hash="206,1,55.88,119.38,RED_MTRPWR,,,,,"/>
+<approved hash="206,1,55.88,116.84,RED_MTRPWR,,,,,"/>
+<approved hash="113,1,48.791,61.491,FRAME1,,,,,"/>
+</errors>
 </schematic>
 </drawing>
 <compatibility>
