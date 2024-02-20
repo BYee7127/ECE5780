@@ -74,9 +74,11 @@ void SetTimers(void){
 	// find the IRQn_Type for TIM2_IRQn, enable it (3.1 Q5)
 	NVIC_EnableIRQ(TIM2_IRQn);
 	
+//----------------------------------------------------------------------------------------------------------
 	// timer 3
 	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN; 		//(3.2 Q1)
 	
+	// configure timer 3 to 800Hz UEV period (3.2 Q2)
 	int targetClk = 800;
 	int timerClk = 8000000;
 	int prescl = 4;
@@ -86,6 +88,7 @@ void SetTimers(void){
 	TIM3->ARR = autoreload;
 	// do not enable update interrupt or setup the interrupt handler
 	
+	// (3.2 Q3)
 	// 0x6878
 	TIM3->CCMR1 |= 0x0008			// CC1S to ouptut & output compare preload enabled
 							|  0x0070			// OC1M to PWM mode 2
@@ -96,8 +99,8 @@ void SetTimers(void){
 	TIM3->CCER |= 0x01				// enable channel 1
 						 |  0x10;				// enable channel 2
 	
-	// set channels to 20% of ARR value
-	float counter = autoreload * 0.2;
+	// set channels to 10% of ARR value (originally 20%, but couldn't tell the difference)
+	float counter = autoreload * 0.15;
 	TIM3->CCR1 = counter;
 	TIM3->CCR2 = counter;
 
