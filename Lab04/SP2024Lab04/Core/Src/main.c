@@ -44,6 +44,17 @@ int main(void)
 	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL4_Pos);
 	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL5_Pos);	
 
+	// enable the RCC clock for USART3, using the system clock (4.2 Q1)
+	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
+	
+	// calculate the baud rate for 115200 bits/second (4.2 Q2)
+	// BRR = processor clock / target baud rate
+	USART3->BRR = HAL_RCC_GetHCLKFreq()/115200;
+	
+	// enable the transmitter and receiver hardware (4.2 Q3)
+	USART3->CR1 |= USART_CR1_TE | USART_CR1_RE;
+	
+	// enable the USART via UE bit
 
   while (1)
   {
