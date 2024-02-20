@@ -1,0 +1,25 @@
+--cpu Cortex-M0
+"sp2024lab04\startup_stm32f072xb.o"
+"sp2024lab04\main.o"
+"sp2024lab04\stm32f0xx_it.o"
+"sp2024lab04\stm32f0xx_hal_msp.o"
+"sp2024lab04\stm32f0xx_hal_tim.o"
+"sp2024lab04\stm32f0xx_hal_tim_ex.o"
+"sp2024lab04\stm32f0xx_hal_rcc.o"
+"sp2024lab04\stm32f0xx_hal_rcc_ex.o"
+"sp2024lab04\stm32f0xx_hal.o"
+"sp2024lab04\stm32f0xx_hal_i2c.o"
+"sp2024lab04\stm32f0xx_hal_i2c_ex.o"
+"sp2024lab04\stm32f0xx_hal_gpio.o"
+"sp2024lab04\stm32f0xx_hal_dma.o"
+"sp2024lab04\stm32f0xx_hal_cortex.o"
+"sp2024lab04\stm32f0xx_hal_pwr.o"
+"sp2024lab04\stm32f0xx_hal_pwr_ex.o"
+"sp2024lab04\stm32f0xx_hal_flash.o"
+"sp2024lab04\stm32f0xx_hal_flash_ex.o"
+"sp2024lab04\stm32f0xx_hal_exti.o"
+"sp2024lab04\system_stm32f0xx.o"
+--strict --scatter "SP2024Lab04\SP2024Lab04.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "SP2024Lab04.map" -o SP2024Lab04\SP2024Lab04.axf
