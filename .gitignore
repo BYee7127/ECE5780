@@ -1,0 +1,7 @@
+*.o
+*.hex
+*.crf
+*.axf
+*.map
+*.lnp
+*.sct

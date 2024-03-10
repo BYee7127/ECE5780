@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file           : main.c
-  * @brief          : Main program body
+  * @brief          : Main program body for Lab04 - UART
   ******************************************************************************
   * @attention
   *
@@ -19,6 +19,13 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void transmitCharacter(void);
+void redLED(void);
+
+//char stringToSend[] = "Hello";
+char stringToSend[2] = {'c'};
+//int stringToSend[3] = {65, 66,'\0'};
+int send = 0;
 
 /**
   * @brief  The application entry point.
@@ -30,35 +37,71 @@ int main(void)
   HAL_Init();
   /* Configure the system clock */
   SystemClock_Config();
+
+	redLED();
 	
 	// choose the pins to use for the USART - PC4 & PC5 (4.1 Q1 & Q2)
-	
-	// enable the clock for the pins
-	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
-	
 	// set the pins to alternate function mode (4.1 Q4)
-	GPIOC->MODER |= GPIO_MODER_MODER4_1;		// TX, BROWN WIRE
-	GPIOC->MODER |= GPIO_MODER_MODER5_1;		// RX, RED WIRE
+	GPIOC->MODER |= GPIO_MODER_MODER4_1;		// TX, BROWN WIRE -> RX on USART
+	GPIOC->MODER |= GPIO_MODER_MODER5_1;		// RX, RED WIRE -> TX on USART
 	
 	// set their alternate functions; AF1 on both pins (4.1 Q4)
 	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL4_Pos);
 	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL5_Pos);	
 
-	// enable the RCC clock for USART3, using the system clock (4.2 Q1)
+	// enable the RCC clock for USART3, using the system clock (4.9.2 Q1)
 	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
 	
-	// calculate the baud rate for 115200 bits/second (4.2 Q2)
+	// calculate the baud rate for 115200 bits/second (4.9.2 Q2)
 	// BRR = processor clock / target baud rate
 	USART3->BRR = HAL_RCC_GetHCLKFreq()/115200;
 	
-	// enable the transmitter and receiver hardware (4.2 Q3)
-	USART3->CR1 |= USART_CR1_TE | USART_CR1_RE;
+	// enable the transmitter and receiver hardware (4.9.2 Q3)
+	USART3->CR1 |= USART_CR1_TE | USART_CR1_RE ;
 	
-	// enable the USART via UE bit
+	// enable the USART via UE bit in CR1 (4.9.2 Q4)
+	USART3->CR1 |= USART_CR1_UE;
 
-  while (1)
-  {
+  while (1) {
+		HAL_Delay(200);
+
+		transmitCharacter();
+
+		// read the character
+/*		if ((USART1->ISR & USART_ISR_RXNE) == USART_ISR_RXNE) {
+			char chartoreceive = (uint8_t)(USART1->RDR); 		// Receive data, clear flag
+		}		*/
+		GPIOC->ODR ^= GPIO_ODR_6;
   }
+}
+/*
+  Transmit a single character onto the USART (4.9.2)
+	Pulled example from peripheral manual
+ */
+void transmitCharacter(){	
+//	if ((USART3->ISR & USART_ISR_TXE) == USART_ISR_TXE) {
+	while ((USART3->ISR & USART_ISR_TXE) != USART_ISR_TXE) {
+
+	}
+
+	USART3->TDR = stringToSend[0];
+}
+
+
+/*
+	Turn on and toggle the red LED to see if it works (?)
+*/
+void redLED() {
+	// enable the clock for the pins
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+	
+	// LED modifications from lab1
+	GPIOC->MODER |= GPIO_MODER_MODER6_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_6);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR6);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR6);
+
+	GPIOC->ODR |= GPIO_ODR_6;
 }
 
 /**
