@@ -1,4 +1,3 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.c
@@ -15,46 +14,10 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+void setupLEDs(void);
 
 /**
   * @brief  The application entry point.
@@ -62,41 +25,144 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
+	
+	setupLEDs();
+	
+	// enable GPIOB and GPIOC in RCC (5.2 Q1)
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
 
-  /* USER CODE BEGIN SysInit */
+	// Set PB11 to alternate function/open-drain output type, I2C2_SDA (5.2 Q2)
+	// AF1
+	GPIOB->AFR[1] |= (0x01 << GPIO_AFRH_AFSEL11_Pos);
+	GPIOC->OTYPER |= GPIO_OTYPER_OT_11;
 
-  /* USER CODE END SysInit */
+	// AF5 PB13
+	// Set PB13 to alternate function/open-drain output type, I2C2_SCL (5.2 Q3)
+	GPIOB->AFR[1] |= (0x05 << GPIO_AFRH_AFSEL13_Pos);
+	GPIOB->OTYPER |= GPIO_OTYPER_OT_13;
+	
+	// set PB14 to output mode, push-pull output type, set to high (5.2 Q4)
+	GPIOB->MODER |= GPIO_MODER_MODER14_0;
+	GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_14);
+	GPIOB->ODR |= GPIO_ODR_14;
 
-  /* Initialize all configured peripherals */
-  /* USER CODE BEGIN 2 */
+	// set PC0 to output mode, push-pull output type, set to high (5.2 Q5)
+	GPIOC->MODER |= GPIO_MODER_MODER0_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_0);
+	GPIOC->ODR |= GPIO_ODR_0;
+	
+	// enable i2c2 in RCC (5.3 Q1)
+   RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
+	// set timing parameters (5.3 Q2)
+	I2C2->TIMINGR =  (0x1 << 28)		// prescaler = 1
+								|  (0x2 << 20)		// SCLDEL = 0x2
+								|  (0x4 << 16)		// SLADEL = 0x4
+								|  (0xF << 8)		// SCLH = 0xF
+								|  (0x13);				// CSLL = 0x13
 
-  /* USER CODE END 2 */
+	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
+	I2C2->CR1 |= I2C_CR1_PE;
+	
+	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
+// set the slave address in CR2 (5.4 Q1)
+	I2C2->CR2 = (1 << 16)		// number of bytes to transmit
+						| I2C_CR2_START	// start bit
+						| (0x6B << 1);			// slave address
+	
+
+	while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+		// wait until the TXIS flag is set
+		while((I2C2->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
+			GPIOC->ODR |= GPIO_ODR_6;
+		}
+		GPIOC->ODR &= ~(GPIO_ODR_6);
+	
+		if((I2C2->ISR & I2C_ISR_TXIS) == I2C_ISR_TXIS) {
+			GPIOC->ODR &= ~(GPIO_ODR_6);
+		}
+		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF){
+			// wait until not acknolwedge is set, wiring
+			GPIOC->ODR |= GPIO_ODR_7;
+		}
+		
+		
+		// write the address for the WHO_AM_I register
+		I2C2->TXDR = 0x0F;
+		
+		// TRANSFER COMPLETE Y/N
+		while((I2C2->ISR & I2C_ISR_TC) != I2C_ISR_TC){
+			// do nothing
+		}
+		
+		// reset to read
+		I2C2->CR2 |= (1 << 13) | (1 << 10);
+		
+		if((I2C2->ISR & I2C_ISR_RXNE) != I2C_ISR_RXNE) {
+			GPIOC->ODR |= GPIO_ODR_8;
+		}
+		else if((I2C2->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+			GPIOC->ODR &= ~(GPIO_ODR_8);
+		}
+		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF){
+			// wait until not acknolwedge is set, wiring
+			GPIOC->ODR |= GPIO_ODR_7;
+		}
+		
+		// TRANSFER COMPLETE Y/N
+		while((I2C2->ISR & I2C_ISR_TC) != I2C_ISR_TC){
+			// do nothing
+		}
+		
+		if(I2C2->RXDR == 0xD4) {
+			GPIOC->ODR |= GPIO_ODR_9;
+		}
+		
+		I2C2->CR2 |= I2C_CR2_STOP;
   }
-  /* USER CODE END 3 */
 }
+
+
+/*
+
+*/
+void setupLEDs() {
+	// enable the clock for the pins
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+	
+	// LED modifications from lab1
+	GPIOC->MODER |= GPIO_MODER_MODER6_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_6);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR6);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR6);
+
+	GPIOC->MODER |= GPIO_MODER_MODER7_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_7);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR7);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR7);
+
+	GPIOC->MODER |= GPIO_MODER_MODER8_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_8);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR8);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR8);
+	
+	GPIOC->MODER |= GPIO_MODER_MODER9_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_9);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR9);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR9);	
+
+	GPIOC->ODR &= ~(GPIO_ODR_6);
+	GPIOC->ODR &= ~(GPIO_ODR_7);
+	GPIOC->ODR &= ~(GPIO_ODR_8);
+	GPIOC->ODR &= ~(GPIO_ODR_9);
+}
+
+
+
+
 
 /**
   * @brief System Clock Configuration
