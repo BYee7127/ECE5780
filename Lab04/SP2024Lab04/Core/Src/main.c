@@ -25,11 +25,9 @@ void USARTSetup(void);
 
 void transmitCharacter(char c);
 void transmitArray(char *arr);
+void readKeys();
 
 char stringToSend[] = "Hello";
-//char stringToSend[2] = {'c'};
-//int stringToSend[3] = {65, 66,'\0'};
-int send = 0;
 
 /**
   * @brief  The application entry point.
@@ -48,38 +46,45 @@ int main(void)
 
   while (1) {
 		//HAL_Delay(200);
-
 		//transmitArray(stringToSend);
 
-		// read the character
-		if ((USART3->ISR & USART_ISR_RXNE) == USART_ISR_RXNE) {
-			char chartoreceive = (uint8_t)(USART3->RDR); 		// Receive data, clear flag
-			
-			// test and toggle appropriate LED (4.2 Q2)
-			switch(chartoreceive){
-				case 'r':
-					transmitArray("red\r\n");
-					GPIOC->ODR ^= GPIO_ODR_6;
-					break;
-				case 'b':
-					transmitArray("blue\r\n");
-					GPIOC->ODR ^= GPIO_ODR_7;
-					break;
-				case 'o':
-					transmitArray("orange\r\n");
-					GPIOC->ODR ^= GPIO_ODR_8;
-					break;
-				case 'g':
-					transmitArray("green\r\n");
-					GPIOC->ODR ^= GPIO_ODR_9;
-					break;
-				default:
-					// any key not matching LED color prints an error message (4.2 Q3)
-					transmitArray("Key is not assigned.\r\n");
-					break;
-			}
-		}	
+		readKeys();
   }
+}
+
+/*
+	Receive character keystroke and toggle the corresponding LED.
+	If a key is receivd that is not an LED, print error message.
+*/
+void readKeys(){
+	// empty while loop
+	while ((USART3->ISR & USART_ISR_RXNE) != USART_ISR_RXNE);
+
+	char chartoreceive = (uint8_t)(USART3->RDR); 		// Receive data, clear flag
+	
+	// test and toggle appropriate LED (4.2 Q2)
+	switch(chartoreceive){
+		case 'r':
+			transmitArray("red\r\n");
+			GPIOC->ODR ^= GPIO_ODR_6;
+			break;
+		case 'b':
+			transmitArray("blue\r\n");
+			GPIOC->ODR ^= GPIO_ODR_7;
+			break;
+		case 'o':
+			transmitArray("orange\r\n");
+			GPIOC->ODR ^= GPIO_ODR_8;
+			break;
+		case 'g':
+			transmitArray("green\r\n");
+			GPIOC->ODR ^= GPIO_ODR_9;
+			break;
+		default:
+			// any key not matching LED color prints an error message (4.2 Q3)
+			transmitArray("Key is not assigned.\r\n");
+			break;
+	}
 }
 
 /*
