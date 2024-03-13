@@ -19,9 +19,12 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+
+void LEDSetup(void);
+void USARTSetup(void);
+
 void transmitCharacter(char c);
 void transmitArray(char *arr);
-void LEDSetup(void);
 
 char stringToSend[] = "Hello";
 //char stringToSend[2] = {'c'};
@@ -41,28 +44,7 @@ int main(void)
 
 	LEDSetup();
 	
-	// choose the pins to use for the USART - PC4 & PC5 (4.1 Q1 & Q2)
-	// set the pins to alternate function mode (4.1 Q4)
-	GPIOC->MODER |= GPIO_MODER_MODER4_1;		// TX, BROWN WIRE -> RX on USART
-	GPIOC->MODER |= GPIO_MODER_MODER5_1;		// RX, RED WIRE -> TX on USART
-	
-	// set their alternate functions; AF1 on both pins (4.1 Q4)
-	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL4_Pos);
-	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL5_Pos);	
-
-	// enable the RCC clock for USART3, using the system clock (4.9.2 Q1)
-	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
-	
-	// calculate the baud rate for 115200 bits/second (4.9.2 Q2)
-	// BRR = processor clock / target baud rate 
-	//	MAKE SURE TO USE SPEED = BRR IN THE PUTTY CONNECTION; otherwise it won't work :T
-	USART3->BRR = HAL_RCC_GetHCLKFreq()/115200;
-	
-	// enable the transmitter and receiver hardware (4.9.2 Q3)
-	USART3->CR1 |= USART_CR1_TE | USART_CR1_RE ;
-	
-	// enable the USART via UE bit in CR1 (4.9.2 Q4)
-	USART3->CR1 |= USART_CR1_UE;
+	USARTSetup();
 
   while (1) {
 		//HAL_Delay(200);
@@ -126,6 +108,35 @@ void transmitCharacter(char c){
 	USART3->TDR = c;
 }
 
+//--Setup methods-------------------------------------------------------------------------------------
+/*
+	Helper method to initialize USART and separate the different parts
+	of the lab. This one does NOT include the interrupt.
+*/
+void USARTSetup() {
+	// choose the pins to use for the USART - PC4 & PC5 (4.1 Q1 & Q2)
+	// set the pins to alternate function mode (4.1 Q4)
+	GPIOC->MODER |= GPIO_MODER_MODER4_1;		// TX, BROWN WIRE -> RX on USART
+	GPIOC->MODER |= GPIO_MODER_MODER5_1;		// RX, RED WIRE -> TX on USART
+	
+	// set their alternate functions; AF1 on both pins (4.1 Q4)
+	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL4_Pos);
+	GPIOC->AFR[0] |= (0x01 << GPIO_AFRL_AFRL5_Pos);	
+
+	// enable the RCC clock for USART3, using the system clock (4.9.2 Q1)
+	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
+	
+	// calculate the baud rate for 115200 bits/second (4.9.2 Q2)
+	// BRR = processor clock / target baud rate 
+	//	MAKE SURE TO USE SPEED = BRR IN THE PUTTY CONNECTION; otherwise it won't work :T
+	USART3->BRR = HAL_RCC_GetHCLKFreq()/115200;
+	
+	// enable the transmitter and receiver hardware (4.9.2 Q3)
+	USART3->CR1 |= USART_CR1_TE | USART_CR1_RE ;
+	
+	// enable the USART via UE bit in CR1 (4.9.2 Q4)
+	USART3->CR1 |= USART_CR1_UE;
+}
 
 /*
 	Set up the LEDS for part 2
