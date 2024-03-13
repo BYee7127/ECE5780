@@ -65,15 +65,15 @@ int main(void)
 	USART3->CR1 |= USART_CR1_UE;
 
   while (1) {
-		HAL_Delay(200);
+		//HAL_Delay(200);
 
-		transmitArray(stringToSend);
+		//transmitArray(stringToSend);
 
 		// read the character
-/*		if ((USART1->ISR & USART_ISR_RXNE) == USART_ISR_RXNE) {
-			char chartoreceive = (uint8_t)(USART1->RDR); 		// Receive data, clear flag
-		}		*/
-		GPIOC->ODR ^= GPIO_ODR_6;
+		if ((USART3->ISR & USART_ISR_RXNE) == USART_ISR_RXNE) {
+			GPIOC->ODR ^= GPIO_ODR_6;
+			char chartoreceive = (uint8_t)(USART3->RDR); 		// Receive data, clear flag
+		}	
   }
 }
 
