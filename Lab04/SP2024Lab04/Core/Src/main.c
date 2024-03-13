@@ -20,10 +20,11 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void transmitCharacter(char c);
+void transmitArray(char *arr);
 void redLED(void);
 
-//char stringToSend[] = "Hello";
-char stringToSend[2] = {'c'};
+char stringToSend[] = "Hello";
+//char stringToSend[2] = {'c'};
 //int stringToSend[3] = {65, 66,'\0'};
 int send = 0;
 
@@ -66,7 +67,7 @@ int main(void)
   while (1) {
 		HAL_Delay(200);
 
-		transmitCharacter('c');
+		transmitArray(stringToSend);
 
 		// read the character
 /*		if ((USART1->ISR & USART_ISR_RXNE) == USART_ISR_RXNE) {
@@ -76,6 +77,20 @@ int main(void)
   }
 }
 
+/*
+	Transmit an entire string array
+	Loop over each element in the array
+	If the current element is not the null character, call transmitCharacter
+	Exit function when '\0' is encountered.
+*/
+void transmitArray(char *arr){
+	int i = 0;
+	while(arr[i] != '\0') {
+		// transmit the character
+		transmitCharacter(arr[i]);
+		i++;
+	}
+}
 
 /*
   Transmit a single character onto the USART (4.9.2)
