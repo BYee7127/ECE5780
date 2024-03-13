@@ -19,7 +19,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void transmitCharacter(void);
+void transmitCharacter(char c);
 void redLED(void);
 
 //char stringToSend[] = "Hello";
@@ -53,7 +53,8 @@ int main(void)
 	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
 	
 	// calculate the baud rate for 115200 bits/second (4.9.2 Q2)
-	// BRR = processor clock / target baud rate
+	// BRR = processor clock / target baud rate 
+	//	MAKE SURE TO USE SPEED = BRR IN THE PUTTY CONNECTION; otherwise it won't work :T
 	USART3->BRR = HAL_RCC_GetHCLKFreq()/115200;
 	
 	// enable the transmitter and receiver hardware (4.9.2 Q3)
@@ -65,7 +66,7 @@ int main(void)
   while (1) {
 		HAL_Delay(200);
 
-		transmitCharacter();
+		transmitCharacter('c');
 
 		// read the character
 /*		if ((USART1->ISR & USART_ISR_RXNE) == USART_ISR_RXNE) {
@@ -74,17 +75,17 @@ int main(void)
 		GPIOC->ODR ^= GPIO_ODR_6;
   }
 }
+
+
 /*
   Transmit a single character onto the USART (4.9.2)
 	Pulled example from peripheral manual
  */
-void transmitCharacter(){	
-//	if ((USART3->ISR & USART_ISR_TXE) == USART_ISR_TXE) {
-	while ((USART3->ISR & USART_ISR_TXE) != USART_ISR_TXE) {
+void transmitCharacter(char c){	
+	// empty while loop
+	while ((USART3->ISR & USART_ISR_TXE) != USART_ISR_TXE);
 
-	}
-
-	USART3->TDR = stringToSend[0];
+	USART3->TDR = c;
 }
 
 
