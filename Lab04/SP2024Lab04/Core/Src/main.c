@@ -21,7 +21,7 @@
 void SystemClock_Config(void);
 void transmitCharacter(char c);
 void transmitArray(char *arr);
-void redLED(void);
+void LEDSetup(void);
 
 char stringToSend[] = "Hello";
 //char stringToSend[2] = {'c'};
@@ -39,7 +39,7 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
-	redLED();
+	LEDSetup();
 	
 	// choose the pins to use for the USART - PC4 & PC5 (4.1 Q1 & Q2)
 	// set the pins to alternate function mode (4.1 Q4)
@@ -71,8 +71,31 @@ int main(void)
 
 		// read the character
 		if ((USART3->ISR & USART_ISR_RXNE) == USART_ISR_RXNE) {
-			GPIOC->ODR ^= GPIO_ODR_6;
 			char chartoreceive = (uint8_t)(USART3->RDR); 		// Receive data, clear flag
+			
+			// test and toggle appropriate LED (4.2 Q2)
+			switch(chartoreceive){
+				case 'r':
+					transmitArray("red\r\n");
+					GPIOC->ODR ^= GPIO_ODR_6;
+					break;
+				case 'b':
+					transmitArray("blue\r\n");
+					GPIOC->ODR ^= GPIO_ODR_7;
+					break;
+				case 'o':
+					transmitArray("orange\r\n");
+					GPIOC->ODR ^= GPIO_ODR_8;
+					break;
+				case 'g':
+					transmitArray("green\r\n");
+					GPIOC->ODR ^= GPIO_ODR_9;
+					break;
+				default:
+					// any key not matching LED color prints an error message (4.2 Q3)
+					transmitArray("Key is not assigned.\r\n");
+					break;
+			}
 		}	
   }
 }
@@ -105,19 +128,40 @@ void transmitCharacter(char c){
 
 
 /*
-	Turn on and toggle the red LED to see if it works (?)
+	Set up the LEDS for part 2
 */
-void redLED() {
+void LEDSetup() {
 	// enable the clock for the pins
 	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
 	
-	// LED modifications from lab1
+	// set up red led (PC6) to low-speed, push-pull output, no push/pull resistor
 	GPIOC->MODER |= GPIO_MODER_MODER6_0;
-	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_6);
 	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR6);
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_6);
 	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR6);
+	
+	// set up blue led (PC7) to low-speed, push-pull output, no push/pull resistor
+	GPIOC->MODER |= GPIO_MODER_MODER7_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_7);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR7);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR7);
 
-	GPIOC->ODR |= GPIO_ODR_6;
+	// set up green led (PC8) to low-speed, push-pull output, no push/pull resistor
+	GPIOC->MODER |= GPIO_MODER_MODER8_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_8);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR8);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR8);
+
+	// set up orange led (PC9) to low-speed, push-pull output, no push/pull resistor
+	GPIOC->MODER |= GPIO_MODER_MODER9_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_9);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR9);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR9);
+
+	GPIOC->ODR &= ~(GPIO_ODR_6);
+	GPIOC->ODR &= ~(GPIO_ODR_7);
+	GPIOC->ODR &= ~(GPIO_ODR_8);
+	GPIOC->ODR &= ~(GPIO_ODR_9);
 }
 
 /**
