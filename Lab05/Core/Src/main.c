@@ -19,6 +19,7 @@
 void SystemClock_Config(void);
 void setupLEDs(void);
 void setupPins(void);
+void setupI2C(void);
 
 /**
   * @brief  The application entry point.
@@ -31,27 +32,8 @@ int main(void)
 	
 	setupLEDs();
 	setupPins();
+	setupI2C();
 	
-	// enable i2c2 in RCC (5.3 Q1)
-  RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
-	// set timing parameters (5.3 Q2)
-	I2C2->TIMINGR =  (0x1 << 28)		// prescaler = 1
-								|  (0x2 << 20)		// SCLDEL = 0x2
-								|  (0x4 << 16)		// SLADEL = 0x4
-								|  (0xF << 8)		// SCLH = 0xF
-								|  (0x13);				// CSLL = 0x13
-
-	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
-	I2C2->CR1 |= I2C_CR1_PE;
-	
-	// clear the NBYTES and SADD bit fields
-	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
-
-	// set the slave address in CR2 (5.4 Q1)
-	I2C2->CR2 = (1 << 16)			// number of bytes to transmit
-						| (0x69 << 1);			// slave address
-	I2C2->CR2 &= ~(1 << 10); 		// write transfer
-	I2C2->CR2 |= (1 << 13);		// start bit
 	
 	// wait until the TXIS flag is set (5.4 Q2)
 	while(1) {
@@ -104,7 +86,7 @@ int main(void)
 	// set the stop bit (5.4 Q9)
 	I2C2->CR2 |= I2C_CR2_STOP;
 	
-		GPIOC->ODR |= GPIO_ODR_7;
+	GPIOC->ODR |= GPIO_ODR_7;
 	
 }
 
@@ -165,6 +147,29 @@ void setupPins() {
 	GPIOC->MODER |= GPIO_MODER_MODER0_0;
 	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_0);
 	GPIOC->ODR |= GPIO_ODR_0;
+}
+
+void setupI2C() {
+	// enable i2c2 in RCC (5.3 Q1)
+  RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
+	// set timing parameters (5.3 Q2)
+	I2C2->TIMINGR =  (0x1 << 28)		// prescaler = 1
+								|  (0x2 << 20)		// SCLDEL = 0x2
+								|  (0x4 << 16)		// SLADEL = 0x4
+								|  (0xF << 8)		// SCLH = 0xF
+								|  (0x13);				// CSLL = 0x13
+
+	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
+	I2C2->CR1 |= I2C_CR1_PE;
+	
+	// clear the NBYTES and SADD bit fields
+	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
+
+	// set the slave address in CR2 (5.4 Q1)
+	I2C2->CR2 = (1 << 16)			// number of bytes to transmit
+						| (0x69 << 1);			// slave address
+	I2C2->CR2 &= ~(1 << 10); 		// write transfer
+	I2C2->CR2 |= (1 << 13);		// start bit
 }
 
 
