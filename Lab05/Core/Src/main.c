@@ -20,6 +20,7 @@ void SystemClock_Config(void);
 void setupLEDs(void);
 void setupPins(void);
 void setupI2C(void);
+void partOne(void);
 
 /**
   * @brief  The application entry point.
@@ -34,7 +35,23 @@ int main(void)
 	setupPins();
 	setupI2C();
 	
+	partOne();
+
+	GPIOC->ODR |= GPIO_ODR_7;
 	
+}
+
+void partOne() {
+	GPIOC->ODR |= GPIO_ODR_8;
+	// clear the NBYTES and SADD bit fields
+	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
+
+	// set the slave address in CR2 (5.4 Q1)
+	I2C2->CR2 = (1 << 16)			// number of bytes to transmit
+						| (0x69 << 1);			// slave address
+	I2C2->CR2 &= ~(1 << 10); 		// write transfer
+	I2C2->CR2 |= (1 << 13);		// start bit
+
 	// wait until the TXIS flag is set (5.4 Q2)
 	while(1) {
 		// exit when the TXIS flag is set
@@ -42,7 +59,7 @@ int main(void)
 			break;
 		}
 		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
-			return 1;
+			return;
 		}
 	}
 
@@ -66,7 +83,7 @@ int main(void)
 			break;
 		}
 		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
-			return 1;
+			return;
 		}
 	}
 	
@@ -85,11 +102,8 @@ int main(void)
 
 	// set the stop bit (5.4 Q9)
 	I2C2->CR2 |= I2C_CR2_STOP;
-	
-	GPIOC->ODR |= GPIO_ODR_7;
-	
+	GPIOC->ODR &= ~(GPIO_ODR_8);
 }
-
 
 void setupLEDs() {
 	// enable the clock for the pins
@@ -161,15 +175,6 @@ void setupI2C() {
 
 	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
 	I2C2->CR1 |= I2C_CR1_PE;
-	
-	// clear the NBYTES and SADD bit fields
-	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
-
-	// set the slave address in CR2 (5.4 Q1)
-	I2C2->CR2 = (1 << 16)			// number of bytes to transmit
-						| (0x69 << 1);			// slave address
-	I2C2->CR2 &= ~(1 << 10); 		// write transfer
-	I2C2->CR2 |= (1 << 13);		// start bit
 }
 
 
