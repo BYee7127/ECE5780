@@ -18,6 +18,7 @@
 
 void SystemClock_Config(void);
 void setupLEDs(void);
+void setupPins(void);
 
 /**
   * @brief  The application entry point.
@@ -29,31 +30,7 @@ int main(void)
   SystemClock_Config();
 	
 	setupLEDs();
-	
-	// enable GPIOB and GPIOC in RCC (5.2 Q1)
-	RCC->AHBENR |= RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
-
-	// Set PB11 to alternate function/open-drain output type, I2C2_SDA (5.2 Q2)
-	// AF1
-	GPIOB->AFR[1] |= (0x01 << GPIO_AFRH_AFSEL11_Pos);
-	GPIOB->MODER |= GPIO_MODER_MODER11_1; 		// set the alternate function mode
-	GPIOB->OTYPER |= GPIO_OTYPER_OT_11;
-
-	// AF5 PB13
-	// Set PB13 to alternate function/open-drain output type, I2C2_SCL (5.2 Q3)
-	GPIOB->AFR[1] |= (0x05 << GPIO_AFRH_AFSEL13_Pos);
-	GPIOB->MODER |= GPIO_MODER_MODER13_1; 		// set the alternate function mode
-	GPIOB->OTYPER |= GPIO_OTYPER_OT_13;
-	
-	// set PB14 to output mode, push-pull output type, set to high (5.2 Q4)
-	GPIOB->MODER |= GPIO_MODER_MODER14_0;
-	GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_14);
-	GPIOB->ODR |= GPIO_ODR_14;
-
-	// set PC0 to output mode, push-pull output type, set to high (5.2 Q5)
-	GPIOC->MODER |= GPIO_MODER_MODER0_0;
-	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_0);
-	GPIOC->ODR |= GPIO_ODR_0;
+	setupPins();
 	
 	// enable i2c2 in RCC (5.3 Q1)
   RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
@@ -119,18 +96,19 @@ int main(void)
 	}
 	
 	// check the RXDR contents to see if it matches the address WHO_AM_I register (5.4 Q8)
-	if(I2C2->RXDR == 0xD3) {
+	if(I2C2->RXDR != 0xD3) {
+		// if the contents are wrong, turn on the LED
 		GPIOC->ODR |= GPIO_ODR_6;
 	}
-		
+
+	// set the stop bit (5.4 Q9)
 	I2C2->CR2 |= I2C_CR2_STOP;
-	GPIOC->ODR &= ~(GPIO_ODR_6);
+	
+		GPIOC->ODR |= GPIO_ODR_7;
+	
 }
 
 
-/*
-
-*/
 void setupLEDs() {
 	// enable the clock for the pins
 	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
@@ -162,10 +140,35 @@ void setupLEDs() {
 	GPIOC->ODR &= ~(GPIO_ODR_9);
 }
 
+void setupPins() {
+	// enable GPIOB and GPIOC in RCC (5.2 Q1)
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
+
+	// Set PB11 to alternate function/open-drain output type, I2C2_SDA (5.2 Q2)
+	// AF1
+	GPIOB->AFR[1] |= (0x01 << GPIO_AFRH_AFSEL11_Pos);
+	GPIOB->MODER |= GPIO_MODER_MODER11_1; 		// set the alternate function mode
+	GPIOB->OTYPER |= GPIO_OTYPER_OT_11;
+
+	// AF5 PB13
+	// Set PB13 to alternate function/open-drain output type, I2C2_SCL (5.2 Q3)
+	GPIOB->AFR[1] |= (0x05 << GPIO_AFRH_AFSEL13_Pos);
+	GPIOB->MODER |= GPIO_MODER_MODER13_1; 		// set the alternate function mode
+	GPIOB->OTYPER |= GPIO_OTYPER_OT_13;
+	
+	// set PB14 to output mode, push-pull output type, set to high (5.2 Q4)
+	GPIOB->MODER |= GPIO_MODER_MODER14_0;
+	GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_14);
+	GPIOB->ODR |= GPIO_ODR_14;
+
+	// set PC0 to output mode, push-pull output type, set to high (5.2 Q5)
+	GPIOC->MODER |= GPIO_MODER_MODER0_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_0);
+	GPIOC->ODR |= GPIO_ODR_0;
+}
 
 
-
-
+/*------------------------------------------------------------------------------------------------*/
 /**
   * @brief System Clock Configuration
   * @retval None
