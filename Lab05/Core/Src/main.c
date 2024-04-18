@@ -21,34 +21,31 @@ void SystemClock_Config(void);
 
 
 int doublei2c(char reg, volatile int16_t* read){ //collects two nums
-
+	// clear the NBYTES and SADD bit fields
 	I2C2->CR2 &= ~((0x3FF << 0) | (0x7F << 16));
+
 	I2C2->CR2 |= (1<<16) //numbytes == 1
 						| (0x69<<1); //slave address = 0x69
 	I2C2->CR2 &= ~(1<<10); //write transfer (bit 10 is 0)
 	I2C2->CR2 |= (1<<13);//start bit
 		
 	while(1){ //wait for TXIS
-		GPIOC->ODR ^= (1<<7);//blue
 		if ((I2C2->ISR & (1<<1))){ break;}
 		else if (I2C2->ISR & I2C_ISR_NACKF) {
 			//error
 			return 1;
 		}
-		GPIOC->ODR ^= (1<<7);//blue
 	}
 
-	I2C2->TXDR = reg; //addr
+	I2C2->TXDR = reg; // 0x20
 	while (1){
-		GPIOC->ODR ^= (1<<8);
 		if (I2C2->ISR & I2C_ISR_TC) {break;} //wait until TC flag is set
-		GPIOC->ODR ^= (1<<8);
 	}
 
 	//READ NOW.
 	I2C2->CR2 &= ~((0x3FF << 0) | (0x7F << 16));
 	I2C2->CR2 |= (2<<16) //numbytes == 1
-						| (0x69<<1); //slave address = 0x69
+						|  (0x69<<1); //slave address = 0x69
 	I2C2->CR2 |= (1<<10); //READ transfer (bit 10 is 1)
 	I2C2->CR2 |= (1<<13);//start bit set
 
@@ -56,9 +53,8 @@ int doublei2c(char reg, volatile int16_t* read){ //collects two nums
 	int16_t result;
 	
 	for(uint32_t i = 0; i < 2; i++){
-		GPIOC->ODR ^= (1<<9);
+		GPIOC->ODR &= ~(1<<9);
 		while (1){
-			GPIOC->ODR ^= (1<<6);
 			if (I2C2->ISR & I2C_ISR_RXNE){break;}
 			else if (I2C2->ISR & I2C_ISR_NACKF) {
 				//error
@@ -74,16 +70,17 @@ int doublei2c(char reg, volatile int16_t* read){ //collects two nums
 	}
 
 	while (1){
-		GPIOC->ODR ^= (1<<9);
+		GPIOC->ODR &= ~(1<<9);
 		if (I2C2->ISR & I2C_ISR_TC) {break;} //wait until TC flag is set
 	}
 	I2C2->CR2 |= (1<<14);//STOP
-	GPIOC->ODR ^= (1<<6);
 	
-	GPIOC->ODR ^= (1<<6);
-	GPIOC->ODR ^= (1<<7);
-	GPIOC->ODR ^= (1<<8);
-	GPIOC->ODR ^= (1<<9);
+	GPIOC->ODR &= ~(1<<6);
+	GPIOC->ODR &= ~(1<<6);
+
+	GPIOC->ODR &= ~(1<<7);
+	GPIOC->ODR &= ~(1<<8);
+	GPIOC->ODR &= ~(1<<9);
 	
 	result = (h << 8) | (l);
 	*(read) = result;
@@ -280,7 +277,7 @@ int main(void) {
 		//collect y
 		doublei2c(0xAA, &y);
 		//decide lights
-		const int16_t thresh = 0x01FF;
+		const int16_t thresh = 0x05FF;
 		if (x < 0-thresh) {GPIOC->ODR |= (1<<8);} else {GPIOC->ODR &= ~(1<<8);} //orange
 		if (y < 0-thresh) {GPIOC->ODR |= (1<<7);} else {GPIOC->ODR &= ~(1<<7);} //blue
 		if (y > thresh) {GPIOC->ODR |= (1<<6);} else {GPIOC->ODR &= ~(1<<6);} //red
