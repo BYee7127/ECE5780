@@ -36,11 +36,13 @@ int main(void)
 	// Set PB11 to alternate function/open-drain output type, I2C2_SDA (5.2 Q2)
 	// AF1
 	GPIOB->AFR[1] |= (0x01 << GPIO_AFRH_AFSEL11_Pos);
-	GPIOC->OTYPER |= GPIO_OTYPER_OT_11;
+	GPIOB->MODER |= GPIO_MODER_MODER11_1; 		// set the alternate function mode
+	GPIOB->OTYPER |= GPIO_OTYPER_OT_11;
 
 	// AF5 PB13
 	// Set PB13 to alternate function/open-drain output type, I2C2_SCL (5.2 Q3)
 	GPIOB->AFR[1] |= (0x05 << GPIO_AFRH_AFSEL13_Pos);
+	GPIOB->MODER |= GPIO_MODER_MODER13_1; 		// set the alternate function mode
 	GPIOB->OTYPER |= GPIO_OTYPER_OT_13;
 	
 	// set PB14 to output mode, push-pull output type, set to high (5.2 Q4)
@@ -54,7 +56,7 @@ int main(void)
 	GPIOC->ODR |= GPIO_ODR_0;
 	
 	// enable i2c2 in RCC (5.3 Q1)
-   RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
+  RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
 	// set timing parameters (5.3 Q2)
 	I2C2->TIMINGR =  (0x1 << 28)		// prescaler = 1
 								|  (0x2 << 20)		// SCLDEL = 0x2
@@ -65,64 +67,64 @@ int main(void)
 	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
 	I2C2->CR1 |= I2C_CR1_PE;
 	
+	// clear the NBYTES and SADD bit fields
 	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
 
-// set the slave address in CR2 (5.4 Q1)
-	I2C2->CR2 = (1 << 16)		// number of bytes to transmit
-						| I2C_CR2_START	// start bit
-						| (0x6B << 1);			// slave address
+	// set the slave address in CR2 (5.4 Q1)
+	I2C2->CR2 = (1 << 16)			// number of bytes to transmit
+						| (0x69 << 1);			// slave address
+	I2C2->CR2 &= ~(1 << 10); 		// write transfer
+	I2C2->CR2 |= (1 << 13);		// start bit
 	
-
-	while (1)
-  {
-		// wait until the TXIS flag is set
-		while((I2C2->ISR & I2C_ISR_TXIS) != I2C_ISR_TXIS) {
-			GPIOC->ODR |= GPIO_ODR_6;
-		}
-		GPIOC->ODR &= ~(GPIO_ODR_6);
-	
+	// wait until the TXIS flag is set (5.4 Q2)
+	while(1) {
+		// exit when the TXIS flag is set
 		if((I2C2->ISR & I2C_ISR_TXIS) == I2C_ISR_TXIS) {
-			GPIOC->ODR &= ~(GPIO_ODR_6);
+			break;
 		}
-		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF){
-			// wait until not acknolwedge is set, wiring
-			GPIOC->ODR |= GPIO_ODR_7;
+		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
+			return 1;
 		}
-		
-		
-		// write the address for the WHO_AM_I register
-		I2C2->TXDR = 0x0F;
-		
-		// TRANSFER COMPLETE Y/N
-		while((I2C2->ISR & I2C_ISR_TC) != I2C_ISR_TC){
-			// do nothing
+	}
+
+	// write the address for the WHO_AM_I register (5.4 Q3)
+	I2C2->TXDR = 0x0F;
+
+	// wait until TC flag is set (5.4 Q4)
+	while(1) {
+		if((I2C2->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+			break;
 		}
-		
-		// reset to read
-		I2C2->CR2 |= (1 << 13) | (1 << 10);
-		
-		if((I2C2->ISR & I2C_ISR_RXNE) != I2C_ISR_RXNE) {
-			GPIOC->ODR |= GPIO_ODR_8;
+	}
+	
+	// reload the CR2 register to read and start it again (5.4 Q5)
+	I2C2->CR2 |= (1 << 13) | (1 << 10);
+
+	// repeat the TXIS part, except with RXNE (5.4 Q6)
+	while(1) {
+		// exit when the RXNE flag is set
+		if((I2C2->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+			break;
 		}
-		else if((I2C2->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
-			GPIOC->ODR &= ~(GPIO_ODR_8);
+		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
+			return 1;
 		}
-		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF){
-			// wait until not acknolwedge is set, wiring
-			GPIOC->ODR |= GPIO_ODR_7;
+	}
+	
+	// wait until TC flag is set (5.4 Q7)
+	while(1) {
+		if((I2C2->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+			break;
 		}
+	}
+	
+	// check the RXDR contents to see if it matches the address WHO_AM_I register (5.4 Q8)
+	if(I2C2->RXDR == 0xD3) {
+		GPIOC->ODR |= GPIO_ODR_6;
+	}
 		
-		// TRANSFER COMPLETE Y/N
-		while((I2C2->ISR & I2C_ISR_TC) != I2C_ISR_TC){
-			// do nothing
-		}
-		
-		if(I2C2->RXDR == 0xD4) {
-			GPIOC->ODR |= GPIO_ODR_9;
-		}
-		
-		I2C2->CR2 |= I2C_CR2_STOP;
-  }
+	I2C2->CR2 |= I2C_CR2_STOP;
+	GPIOC->ODR &= ~(GPIO_ODR_6);
 }
 
 
