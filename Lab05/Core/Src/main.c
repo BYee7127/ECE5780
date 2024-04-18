@@ -91,6 +91,7 @@ int doublei2c(char reg, volatile int16_t* read){ //collects two nums
 	return 0;
 }
 
+/**/
 int i2ctransfer(char reg, char info , volatile char* read){ //slave address = 0x69
 	I2C2->CR2 &= ~((0x3FF << 0) | (0x7F << 16));
 	I2C2->CR2 |= (2<<16) //numbytes == 1
@@ -165,11 +166,36 @@ int i2ctransfer(char reg, char info , volatile char* read){ //slave address = 0x
 	return 0;
 }
 
+/**/
 void initleds(){
-	GPIOC->MODER |= (1<<12 | 1<<14 | 1<<16 | 1<<18);
-	GPIOC->OTYPER &= ~(1<<6 | 1<<7 | 1<<8 | 1<<9);
-	GPIOC->OSPEEDR &= ~(1<<12 | 1<<14 | 1<<16 | 1<<18);
-	GPIOC->PUPDR &= ~(1<<12 | 1<<13 | 1<<14 | 1<<15 | 1<<16 | 1<<17 | 1<<18 | 1<<19);
+	// enable the clock for the pins
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+	
+	// LED modifications from lab1
+	GPIOC->MODER |= GPIO_MODER_MODER6_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_6);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR6);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR6);
+
+	GPIOC->MODER |= GPIO_MODER_MODER7_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_7);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR7);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR7);
+
+	GPIOC->MODER |= GPIO_MODER_MODER8_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_8);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR8);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR8);
+	
+	GPIOC->MODER |= GPIO_MODER_MODER9_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_9);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR9);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR9);	
+
+	GPIOC->ODR &= ~(GPIO_ODR_6);
+	GPIOC->ODR &= ~(GPIO_ODR_7);
+	GPIOC->ODR &= ~(GPIO_ODR_8);
+	GPIOC->ODR &= ~(GPIO_ODR_9);
 }
 
 void initgyro(){
@@ -186,7 +212,7 @@ int main(void) {
 	SystemClock_Config();
 
 	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+	//RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
 	initleds();
 
 	//pin b11
@@ -222,14 +248,14 @@ int main(void) {
 								| (0x13<<0);//8SCLL == 0x13
 	I2C2->CR1 |= (1<<0); //PE bit
 
-	initgyro();
+	//initgyro();
 
 	volatile char read, info, reg;
 
 	reg = 0x20;
 	info = 0x0B; 
 
-	i2ctransfer(reg, info, &read);//reg info read
+	//i2ctransfer(reg, info, &read);//reg info read
 
 //////////////////////////////////
 	//main loop
