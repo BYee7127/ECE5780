@@ -167,7 +167,7 @@ int i2ctransfer(char reg, char info , volatile char* read){ //slave address = 0x
 }
 
 /**/
-void initleds(){
+void setupLEDs(){
 	// enable the clock for the pins
 	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
 	
@@ -198,6 +198,52 @@ void initleds(){
 	GPIOC->ODR &= ~(GPIO_ODR_9);
 }
 
+/**/
+void setupPins() {
+	// enable GPIOB and GPIOC in RCC (5.2 Q1)
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;
+
+	// Set PB11 to alternate function/open-drain output type, I2C2_SDA (5.2 Q2)
+	// AF1
+	GPIOB->AFR[1] |= (0x01 << GPIO_AFRH_AFSEL11_Pos);
+	GPIOB->MODER |= GPIO_MODER_MODER11_1; 		// set the alternate function mode
+	GPIOB->OTYPER |= GPIO_OTYPER_OT_11;
+
+	// AF5 PB13
+	// Set PB13 to alternate function/open-drain output type, I2C2_SCL (5.2 Q3)
+	GPIOB->AFR[1] |= (0x05 << GPIO_AFRH_AFSEL13_Pos);
+	GPIOB->MODER |= GPIO_MODER_MODER13_1; 		// set the alternate function mode
+	GPIOB->OTYPER |= GPIO_OTYPER_OT_13;
+	
+	// set PB14 to output mode, push-pull output type, set to high (5.2 Q4)
+	GPIOB->MODER |= GPIO_MODER_MODER14_0;
+	GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_14);
+	GPIOB->ODR |= GPIO_ODR_14;
+
+	GPIOB->PUPDR |= (1 << 22 | 1 << 26);
+
+	// set PC0 to output mode, push-pull output type, set to high (5.2 Q5)
+	GPIOC->MODER |= GPIO_MODER_MODER0_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_0);
+	GPIOC->ODR |= GPIO_ODR_0;
+}
+
+/**/
+void setupI2C() {
+	// enable i2c2 in RCC (5.3 Q1)
+  RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
+	
+	// set timing parameters (5.3 Q2)
+	I2C2->TIMINGR =  (0x1 << 28)		// prescaler = 1
+								|  (0x4 << 20)		// SCLDEL = 0x4
+								|  (0x2 << 16)		// SDADEL = 0x2
+								|  (0xF << 8)		// SCLH = 0xF
+								|  (0x13);				// CSLL = 0x13
+
+	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
+	I2C2->CR1 |= I2C_CR1_PE;
+}
+
 void initgyro(){
 	//gyro
 	GPIOC->BSRR = (1<<0);
@@ -211,44 +257,10 @@ int main(void) {
 	HAL_Init();
 	SystemClock_Config();
 
-	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-	//RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
-	initleds();
-
-	//pin b11
-	GPIOB->MODER |= (1<<23 | 0<<22); //alternate function mode for pin B11
-	GPIOB->OTYPER |= (1<<11);//open drain output on B11
-	GPIOB->AFR[1] |= (1<<12); //set pin B11 to AF 1 (I2C2_SDA)
-
-	//pin b13
-	GPIOB->MODER |= (1<<27); //alternate function mode for pin b13
-	GPIOB->OTYPER |= (1<<13);//open drain B13
-	GPIOB->AFR[1] |= (1<<22 | 1<<20);//AF5 for pin b13 (i2c2_SCL)
-
-	//pin b14
-	GPIOB->MODER |= (1<<28);//output mode
-	//pushpull is default
-	GPIOB->ODR |= (1<<14);//initialize high
-
-	GPIOB->PUPDR |= (1<<22 | 1<<26);
-
-	//pin PC0
-	GPIOC->MODER |= (1<<0); //PC0 output mode
-	//pushpull is default
-	GPIOC->ODR |= (1<<0);//initialize high
-
-
-	RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
-
-	//i2c2
-	I2C2->TIMINGR = (1<< 28)//PRESCALER == 1
-								| (0x4 << 20) // SCLDEL == 0x4
-								| (0x2<<16) //SDADEL == 0x2
-								| (0xF<<8)//SCLH == 0xF
-								| (0x13<<0);//8SCLL == 0x13
-	I2C2->CR1 |= (1<<0); //PE bit
-
-	//initgyro();
+	setupLEDs();
+	setupPins();
+	setupI2C();
+	initgyro();
 
 	volatile char read, info, reg;
 
