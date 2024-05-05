@@ -18,151 +18,117 @@
 #include "main.h"
 
 void SystemClock_Config(void);
+void setupLEDs(void);
+void setupPins(void);
+void setupI2C(void);
+void partOne(void);
+void flashLEDs(void);
+void checkTransmitComplete(void);
+int checkTransmitEmpty(void);
+int checkReadEmpty(void);
 
+/**
+* @brief The application entry point.
+* @retval int
+*/
+int main(void) {
+	HAL_Init();
+	SystemClock_Config();
 
-int doublei2c(char reg, volatile int16_t* read){ //collects two nums
-	// clear the NBYTES and SADD bit fields
-	I2C2->CR2 &= ~((0x3FF << 0) | (0x7F << 16));
-
-	I2C2->CR2 |= (1<<16) //numbytes == 1
-						| (0x69<<1); //slave address = 0x69
-	I2C2->CR2 &= ~(1<<10); //write transfer (bit 10 is 0)
-	I2C2->CR2 |= (1<<13);//start bit
+	setupLEDs();
+	setupPins();
+	setupI2C();
+	
+	if(checkTransmitEmpty() == 1) {
+		// error was returned, flash all LEDs then exit
+		flashLEDs();
+		return 1;
+	}
+	
+	// write the address for the WHO_AM_I register (5.4 Q3)
+	I2C2->TXDR = 0x0F;
+	
+	// check for transfer complete
+	checkTransmitComplete();
+	
+	// now read
+	if(checkReadEmpty() == 1) {
+		// error was returned, flash all LEDs then exit
+		flashLEDs();
+		return 1;
+	}
+	
+	// check for transfer complete
+	checkTransmitComplete();
+	
+	// check the RXDR contents to see if it matches the address WHO_AM_I register (5.4 Q8)
+	if(I2C2->RXDR != 0xD3) {
+		// if it's not right, flash LEDs
+		flashLEDs();
+	}
 		
-	while(1){ //wait for TXIS
-		if ((I2C2->ISR & (1<<1))){ break;}
-		else if (I2C2->ISR & I2C_ISR_NACKF) {
-			//error
+	I2C2->CR2 |= I2C_CR2_STOP;
+	
+	GPIOC->ODR |= (GPIO_ODR_7);
+}
+
+	// wait until the TXIS flag is set (5.4 Q2)
+int checkTransmitEmpty(){
+	while(1) {
+		// exit when the TXIS flag is set
+		if((I2C2->ISR & I2C_ISR_TXIS) == I2C_ISR_TXIS) {
+			break;
+		}
+		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
 			return 1;
 		}
 	}
-
-	I2C2->TXDR = reg; // 0x20
-	while (1){
-		if (I2C2->ISR & I2C_ISR_TC) {break;} //wait until TC flag is set
-	}
-
-	//READ NOW.
-	I2C2->CR2 &= ~((0x3FF << 0) | (0x7F << 16));
-	I2C2->CR2 |= (2<<16) //numbytes == 1
-						|  (0x69<<1); //slave address = 0x69
-	I2C2->CR2 |= (1<<10); //READ transfer (bit 10 is 1)
-	I2C2->CR2 |= (1<<13);//start bit set
-
-	int8_t h, l;
-	int16_t result;
-	
-	for(uint32_t i = 0; i < 2; i++){
-		GPIOC->ODR &= ~(1<<9);
-		while (1){
-			if (I2C2->ISR & I2C_ISR_RXNE){break;}
-			else if (I2C2->ISR & I2C_ISR_NACKF) {
-				//error
-				return 1;
-			}
-		}
-		if (i == 0){
-			l = I2C2->RXDR;
-		}
-		else{
-			h = I2C2->RXDR;
-		}
-	}
-
-	while (1){
-		GPIOC->ODR &= ~(1<<9);
-		if (I2C2->ISR & I2C_ISR_TC) {break;} //wait until TC flag is set
-	}
-	I2C2->CR2 |= (1<<14);//STOP
-	
-	GPIOC->ODR &= ~(1<<6);
-	GPIOC->ODR &= ~(1<<6);
-
-	GPIOC->ODR &= ~(1<<7);
-	GPIOC->ODR &= ~(1<<8);
-	GPIOC->ODR &= ~(1<<9);
-	
-	result = (h << 8) | (l);
-	*(read) = result;
 	
 	return 0;
 }
 
-/**/
-int i2ctransfer(char reg, char info , volatile char* read){ //slave address = 0x69
-	I2C2->CR2 &= ~((0x3FF << 0) | (0x7F << 16));
-	I2C2->CR2 |= (2<<16) //numbytes == 1
-						| (0x69<<1); //slave address = 0x69
-	I2C2->CR2 &= ~(1<<10); //write transfer (bit 10 is 0)
-	I2C2->CR2 |= (1<<13);//start bit
+// wait until TC flag is set (5.4 Q4)
+void checkTransmitComplete(){
+	while(1) {
+		if((I2C2->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+			break;
+		}
+	}
+}
 
-	while(1){ //wait for TXIS
-		GPIOC->ODR ^= (1<<7);//blue 
-		if ((I2C2->ISR & (1<<1))){ break;}
-		else if (I2C2->ISR & I2C_ISR_NACKF) {
-			//error
+int checkReadEmpty(){	
+	// reload the CR2 register to read and start it again (5.4 Q5)
+	I2C2->CR2 |= (1 << 13) | (1 << 10);
+
+	// repeat the TXIS part, except with RXNE (5.4 Q6)
+	while(1) {
+		// exit when the RXNE flag is set
+		if((I2C2->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+			break;
+		}
+		else if((I2C2->ISR & I2C_ISR_NACKF) == I2C_ISR_NACKF) {
 			return 1;
 		}
-		HAL_Delay(200);
-		GPIOC->ODR ^= (1<<7);//blue
 	}
 
-	I2C2->TXDR = reg; //addr
-
-	while(1){ //wait for TXIS
-		GPIOC->ODR |= (1<<8);
-		if ((I2C2->ISR & (1<<1))){ break;}
-		else if (I2C2->ISR & I2C_ISR_NACKF) {
-			//error
-			return 1;
-		}
-		HAL_Delay(200);
-		GPIOC->ODR |= (1<<8);
-	}
-	
-	I2C2->TXDR = info;
-	
-	while (1){
-		GPIOC->ODR |= (1<<9);
-		if (I2C2->ISR & I2C_ISR_TC) {break;} //wait until TC flag is set
-		HAL_Delay(200);
-		GPIOC->ODR |= (1<<9);
-	}
-
-	I2C2->CR2 &= ~((0x3FF << 0) | (0x7F << 16));
-	I2C2->CR2 |= (1<<16) //numbytes == 1
-						| (0x69<<1); //slave address = 0x69
-	I2C2->CR2 |= (1<<10); //READ transfer (bit 10 is 1)
-	I2C2->CR2 |= (1<<13);//start bit set
-	
-	while (1){
-		GPIOC->ODR |= (1<<6);
-		if (I2C2->ISR & I2C_ISR_RXNE){break;}
-		else if (I2C2->ISR & I2C_ISR_NACKF) {
-			//error
-			return 1;
-		}
-		HAL_Delay(200);
-		GPIOC->ODR |= (1<<6);
-	}
-
-	while (1){
-		GPIOC->ODR ^= (1<<7);
-		if (I2C2->ISR & I2C_ISR_TC){break;}
-		HAL_Delay(200);
-		//GPIOC->ODR ^= (1<<7);
-	}
-	
-	*(read) = I2C2->RXDR;
-	I2C2->CR2 |= (1<<14);//STOP
-
-	GPIOC->ODR ^= (1<<6);
-	GPIOC->ODR ^= (1<<8);
-	GPIOC->ODR ^= (1<<9);
-	
 	return 0;
 }
 
+void flashLEDs() {
+	GPIOC->ODR |= (GPIO_ODR_6);
+	GPIOC->ODR |= (GPIO_ODR_7);
+	GPIOC->ODR |= (GPIO_ODR_8);
+	GPIOC->ODR |= (GPIO_ODR_9);
+
+	HAL_Delay(200);
+	
+	GPIOC->ODR &= ~(GPIO_ODR_6);
+	GPIOC->ODR &= ~(GPIO_ODR_7);
+	GPIOC->ODR &= ~(GPIO_ODR_8);
+	GPIOC->ODR &= ~(GPIO_ODR_9);
+}
+
+/*---------------------------------------------------------------------------------------------*/
 /**/
 void setupLEDs(){
 	// enable the clock for the pins
@@ -217,8 +183,6 @@ void setupPins() {
 	GPIOB->OTYPER &= ~(GPIO_OTYPER_OT_14);
 	GPIOB->ODR |= GPIO_ODR_14;
 
-	GPIOB->PUPDR |= (1 << 22 | 1 << 26);
-
 	// set PC0 to output mode, push-pull output type, set to high (5.2 Q5)
 	GPIOC->MODER |= GPIO_MODER_MODER0_0;
 	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_0);
@@ -239,54 +203,19 @@ void setupI2C() {
 
 	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
 	I2C2->CR1 |= I2C_CR1_PE;
-}
+		
+	// clear the NBYTES and SADD bit fields
+	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
 
-void initgyro(){
-	//gyro
-	GPIOC->BSRR = (1<<0);
-}
-
-/**
-* @brief The application entry point.
-* @retval int
-*/
-int main(void) {
-	HAL_Init();
-	SystemClock_Config();
-
-	setupLEDs();
-	setupPins();
-	setupI2C();
-	initgyro();
-
-	volatile char read, info, reg;
-
-	reg = 0x20;
-	info = 0x0B; 
-
-	//i2ctransfer(reg, info, &read);//reg info read
-
-//////////////////////////////////
-	//main loop
-	while (1)
-	{
-		HAL_Delay(100);
-		volatile int16_t x, y;
-		//collect x
-		doublei2c(0xA8, &x); //reg read
-		//collect y
-		doublei2c(0xAA, &y);
-		//decide lights
-		const int16_t thresh = 0x05FF;
-		if (x < 0-thresh) {GPIOC->ODR |= (1<<8);} else {GPIOC->ODR &= ~(1<<8);} //orange
-		if (y < 0-thresh) {GPIOC->ODR |= (1<<7);} else {GPIOC->ODR &= ~(1<<7);} //blue
-		if (y > thresh) {GPIOC->ODR |= (1<<6);} else {GPIOC->ODR &= ~(1<<6);} //red
-		if (x > thresh) {GPIOC->ODR |= (1<<9);} else {GPIOC->ODR &= ~(1<<9);} //green
-	}
+	// set the slave address in CR2 (5.4 Q1)
+	I2C2->CR2 = (1 << 16)			// number of bytes to transmit
+						| (0x69 << 1);			// slave address
+	I2C2->CR2 &= ~(1 << 10); 		// write transfer
+	I2C2->CR2 |= I2C_CR2_START;		// start bit
 }
 
 
-
+/*---------------------------------------------------------------------------------------------*/
 /**
 * @brief System Clock Configuration
 * @retval None
