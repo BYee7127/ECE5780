@@ -21,6 +21,8 @@ void SystemClock_Config(void);
 void setupLEDs(void);
 void setupPins(void);
 void setupI2C(void);
+
+int initGyro(void);
 void partOne(void);
 void flashLEDs(int times);
 
@@ -112,8 +114,10 @@ int main(void) {
 	setupPins();
 	setupI2C();
 	
-	partOne();
+	//partOne();
 
+	// initialize the gyro and show if anything wrong happened by the # of LEDs flashed
+	flashLEDs(initGyro());
 }
 
 void partOne() {
@@ -185,6 +189,29 @@ void flashLEDs(int times) {
 }
 
 /*--setup functions----------------------------------------------------------------------------*/
+int initGyro() {
+	// initialize the gyro
+	setWrite(2);
+	if(checkTXIS(0x20) == 1) {			// set the CTRL_REG1 address (5.5 Q1)
+		return 2;
+	}
+
+	if(checkTXIS(0x0B) == 1) {			// set the PD bit for the register (5.5 Q2)
+		return 3;
+	}
+	
+	checkTC();
+	
+	setRead(1);
+	if(checkRXNE() == 1) {
+		return 4;
+	}
+
+	checkTC();
+	I2C2->CR2 |= I2C_CR2_STOP;
+	return 1;
+}
+
 /**/
 void setupLEDs(){
 	// enable the clock for the pins
