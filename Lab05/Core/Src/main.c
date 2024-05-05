@@ -25,6 +25,7 @@ void setupI2C(void);
 int initGyro(void);
 void partOne(void);
 void flashLEDs(int times);
+int16_t getAxisValue(char reg);
 
 
 void setWrite(int byte) {
@@ -119,58 +120,32 @@ int main(void) {
 	// initialize the gyro
 	initGyro();
 	
-		// set a threshold to account for noise
-		int16_t thresh = 0x00FF;
+	// set a threshold to account for noise
+	int16_t thresh = 0x05FF;
+	int16_t xpos, ypos;
 	
 	// read gyro
 	while(1) {
+		// get x
+		xpos = getAxisValue(0xAA);
+		
 		// need a delay so it can be read properly
-		HAL_Delay(100);
+		HAL_Delay(80);
 		
-		// get x, register 0xA8 or 0x28 (x_low) & 0x29 (x_high)
-		setWrite(1);
-		if(checkTXIS(0xA8) == 1) {			// set the x-axis
-			flashLEDs(2);
-			return 1;
-		}
+		// get y
+		ypos = getAxisValue(0xA8);
+
+		if(xpos < 0 - thresh) {GPIOC->ODR |= (GPIO_ODR_8);}
+		else {GPIOC->ODR &= ~(GPIO_ODR_8);}
 		
-		checkTC();
-		setRead(2);
-		int8_t high, low;
-		
-		if(checkRXNE() == 1) {			// read the lower x-axis register
-			flashLEDs(3);
-			return 1;
-		}
-		
-		high = I2C2->RXDR;			// put the result into the variable
-		
-		if(checkRXNE() == 1) {			// read the higher x-axis register
-			flashLEDs(4);
-			return 1;
-		}
-		
-		low = I2C2->RXDR;			// put the result into the variable
-		
-		checkTC();
-		I2C2->CR2 |= I2C_CR2_STOP;
-		
-		int16_t xpos = (high << 8) | (low << 0);		// put the data together
-		
-		if(xpos < 0 - thresh) {
-			GPIOC->ODR |= (GPIO_ODR_8);
-		}
-		else {
-			GPIOC->ODR &= ~(GPIO_ODR_8);
-		}
-		if(xpos > thresh) {
-			GPIOC->ODR |= (GPIO_ODR_9);
-		}
-		else {
-			GPIOC->ODR &= ~(GPIO_ODR_9);
-		}
-		
-		// get y, register 0xAA or 0x2A (y_low) & 0x2B (y_high)
+		if(xpos > thresh) {GPIOC->ODR |= (GPIO_ODR_9);}
+		else {GPIOC->ODR &= ~(GPIO_ODR_9);}
+
+		if(ypos < 0 - thresh) {GPIOC->ODR |= (GPIO_ODR_7);}
+		else {GPIOC->ODR &= ~(GPIO_ODR_7);}
+
+		if(ypos > thresh) {GPIOC->ODR |= (GPIO_ODR_6);}
+		else {GPIOC->ODR &= ~(GPIO_ODR_6);}
 	}
 }
 
@@ -214,6 +189,37 @@ void partOne() {
 }
 
 /*--helper functions--------------------------------------------------------------------------*/
+int16_t getAxisValue(char reg) {
+	setWrite(1);
+	if(checkTXIS(reg) == 1) {			// set the axis
+		flashLEDs(2);
+		return 1;
+	}
+	
+	checkTC();
+	setRead(2);
+	int8_t high, low;
+	
+	if(checkRXNE() == 1) {			// read the lower axis register
+		flashLEDs(3);
+		return 1;
+	}
+	
+	high = I2C2->RXDR;			// put the result into the variable
+	
+	if(checkRXNE() == 1) {			// read the higher axis register
+		flashLEDs(4);
+		return 1;
+	}
+	
+	low = I2C2->RXDR;			// put the result into the variable
+	
+	checkTC();
+	I2C2->CR2 |= I2C_CR2_STOP;
+
+	return (high << 8) | (low << 0);		// put the data together
+}
+
 /*
  * Flashes all 4 LEDs as a means of debugging.
  *

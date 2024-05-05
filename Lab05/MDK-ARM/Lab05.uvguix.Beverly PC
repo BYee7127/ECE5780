@@ -1866,10 +1866,10 @@
       <Doc>
         <Name>../Core/Src/main.c</Name>
         <ColumnNumber>15</ColumnNumber>
-        <TopLine>91</TopLine>
-        <CurrentLine>128</CurrentLine>
+        <TopLine>85</TopLine>
+        <CurrentLine>133</CurrentLine>
         <Folding>1</Folding>
-        <ContractedFolders>46,91,95,176</ContractedFolders>
+        <ContractedFolders>47,92,96,151</ContractedFolders>
         <PaneID>0</PaneID>
       </Doc>
     </MDIGroup>
