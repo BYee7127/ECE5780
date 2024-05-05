@@ -22,58 +22,27 @@ void setupLEDs(void);
 void setupPins(void);
 void setupI2C(void);
 void partOne(void);
-void flashLEDs(void);
-void checkTransmitComplete(void);
-int checkTransmitEmpty(void);
-int checkReadEmpty(void);
+void flashLEDs(int times);
 
-/**
-* @brief The application entry point.
-* @retval int
-*/
-int main(void) {
-	HAL_Init();
-	SystemClock_Config();
 
-	setupLEDs();
-	setupPins();
-	setupI2C();
+void setWrite(int byte) {
+	// clear the NBYTES and SADD bit fields
+	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
+
+	// set the slave address in CR2 (5.4 Q1)
+	I2C2->CR2 = (byte << 16)			// number of bytes to transmit
+						| (0x69 << 1);			// slave address
 	
-	if(checkTransmitEmpty() == 1) {
-		// error was returned, flash all LEDs then exit
-		flashLEDs();
-		return 1;
-	}
-	
-	// write the address for the WHO_AM_I register (5.4 Q3)
-	I2C2->TXDR = 0x0F;
-	
-	// check for transfer complete
-	checkTransmitComplete();
-	
-	// now read
-	if(checkReadEmpty() == 1) {
-		// error was returned, flash all LEDs then exit
-		flashLEDs();
-		return 1;
-	}
-	
-	// check for transfer complete
-	checkTransmitComplete();
-	
-	// check the RXDR contents to see if it matches the address WHO_AM_I register (5.4 Q8)
-	if(I2C2->RXDR != 0xD3) {
-		// if it's not right, flash LEDs
-		flashLEDs();
-	}
-		
-	I2C2->CR2 |= I2C_CR2_STOP;
-	
-	GPIOC->ODR |= (GPIO_ODR_7);
+	I2C2->CR2 &= ~(1 << 10); 		// write transfer
+	I2C2->CR2 |= I2C_CR2_START;		// start bit
 }
 
-	// wait until the TXIS flag is set (5.4 Q2)
-int checkTransmitEmpty(){
+/*
+ * Wait for the TXIS or NACKF flag is set.
+ * If the NACKF flag is set, then there is a wiring issue.
+ * If the function leaves the while loop, then set the register
+ */
+int checkTXIS(char reg){
 	while(1) {
 		// exit when the TXIS flag is set
 		if((I2C2->ISR & I2C_ISR_TXIS) == I2C_ISR_TXIS) {
@@ -84,23 +53,27 @@ int checkTransmitEmpty(){
 		}
 	}
 	
+	I2C2->TXDR = reg;		// set the register
 	return 0;
 }
 
-// wait until TC flag is set (5.4 Q4)
-void checkTransmitComplete(){
-	while(1) {
-		if((I2C2->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
-			break;
-		}
-	}
+/*
+ * Wait for the RXNE or NACKF flag is set.
+ * If the NACKF flag is set, then there is a wiring issue.
+ */
+void setRead(int byte) {
+	// clear the NBYTES and SADD bit fields
+	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
+
+	// set the slave address in CR2 (5.4 Q1)
+	I2C2->CR2 = (byte << 16)			// number of bytes to transmit
+						| (0x69 << 1);			// slave address
+	
+	I2C2->CR2 |= (1 << 10); 		// enable read
+	I2C2->CR2 |= I2C_CR2_START;		// start bit
 }
 
-int checkReadEmpty(){	
-	// reload the CR2 register to read and start it again (5.4 Q5)
-	I2C2->CR2 |= (1 << 13) | (1 << 10);
-
-	// repeat the TXIS part, except with RXNE (5.4 Q6)
+int checkRXNE(){	
 	while(1) {
 		// exit when the RXNE flag is set
 		if((I2C2->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
@@ -114,21 +87,104 @@ int checkReadEmpty(){
 	return 0;
 }
 
-void flashLEDs() {
-	GPIOC->ODR |= (GPIO_ODR_6);
-	GPIOC->ODR |= (GPIO_ODR_7);
-	GPIOC->ODR |= (GPIO_ODR_8);
-	GPIOC->ODR |= (GPIO_ODR_9);
-
-	HAL_Delay(200);
-	
-	GPIOC->ODR &= ~(GPIO_ODR_6);
-	GPIOC->ODR &= ~(GPIO_ODR_7);
-	GPIOC->ODR &= ~(GPIO_ODR_8);
-	GPIOC->ODR &= ~(GPIO_ODR_9);
+/*
+ * Wait until the transfer is complete.
+ * If it is not complete, then it hangs here.
+ */
+void checkTC(){
+	while(1) {
+		if((I2C2->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
+			break;
+		}
+	}
 }
 
-/*---------------------------------------------------------------------------------------------*/
+/*--main function-----------------------------------------------------------------------------*/
+/**
+* @brief The application entry point.
+* @retval int
+*/
+int main(void) {
+	HAL_Init();
+	SystemClock_Config();
+
+	setupLEDs();
+	setupPins();
+	setupI2C();
+	
+	partOne();
+
+}
+
+void partOne() {
+	setWrite(1);
+	
+	// wait until the TXIS flag is set (5.4 Q2)
+	// write the address for the WHO_AM_I register (5.4 Q3)
+	if(checkTXIS(0x0F) == 1) {
+		// error was returned, flash all LEDs then exit
+		flashLEDs(2);
+		return;
+	}
+	
+	// wait until TC flag is set (5.4 Q4)
+	checkTC();
+	
+	setRead(1);
+	// reload the CR2 register to read and start it again (5.4 Q5)
+	// wait until the RXNE flag is set (5.4 Q6)
+	if(checkRXNE() == 1) {
+		// error was returned, flash all LEDs then exit
+		flashLEDs(3);
+		return;
+	}
+	
+	// wait until TC flag is set (5.4 Q7)
+	checkTC();
+	
+	// check the RXDR contents to see if it matches the address WHO_AM_I register (5.4 Q8)
+	if(I2C2->RXDR != 0xD3) {
+		// if it's not right, flash LEDs
+		flashLEDs(4);
+	}
+	
+	// set the stop bit and release the I2C bus (5.4 Q9)
+	I2C2->CR2 |= I2C_CR2_STOP;
+	
+	// flash once when successfully reaching here.
+	flashLEDs(1);
+}
+
+/*--helper functions--------------------------------------------------------------------------*/
+/*
+ * Flashes all 4 LEDs as a means of debugging.
+ *
+ * It takes in an integer that tells the while loop how many times to
+ * flash the LED.
+ * 1 = everything good
+ * 2+ = something went wrong
+ */
+void flashLEDs(int times) {
+	int count = 0;
+	while(count < times){
+		GPIOC->ODR |= (GPIO_ODR_6);
+		GPIOC->ODR |= (GPIO_ODR_7);
+		GPIOC->ODR |= (GPIO_ODR_8);
+		GPIOC->ODR |= (GPIO_ODR_9);
+
+		HAL_Delay(200);
+		
+		GPIOC->ODR &= ~(GPIO_ODR_6);
+		GPIOC->ODR &= ~(GPIO_ODR_7);
+		GPIOC->ODR &= ~(GPIO_ODR_8);
+		GPIOC->ODR &= ~(GPIO_ODR_9);
+
+		count++;
+		HAL_Delay(200);
+	}
+}
+
+/*--setup functions----------------------------------------------------------------------------*/
 /**/
 void setupLEDs(){
 	// enable the clock for the pins
@@ -203,19 +259,10 @@ void setupI2C() {
 
 	// Enable the I2C peripheral using the PE bit in the CR1 register (5.3 Q3)
 	I2C2->CR1 |= I2C_CR1_PE;
-		
-	// clear the NBYTES and SADD bit fields
-	I2C2->CR2 &= ~((0x7F << 16) | (0x3FF << 0));	
-
-	// set the slave address in CR2 (5.4 Q1)
-	I2C2->CR2 = (1 << 16)			// number of bytes to transmit
-						| (0x69 << 1);			// slave address
-	I2C2->CR2 &= ~(1 << 10); 		// write transfer
-	I2C2->CR2 |= I2C_CR2_START;		// start bit
 }
 
 
-/*---------------------------------------------------------------------------------------------*/
+/*--auto-generated functions-------------------------------------------------------------------*/
 /**
 * @brief System Clock Configuration
 * @retval None
