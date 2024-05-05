@@ -116,8 +116,62 @@ int main(void) {
 	
 	//partOne();
 
-	// initialize the gyro and show if anything wrong happened by the # of LEDs flashed
-	flashLEDs(initGyro());
+	// initialize the gyro
+	initGyro();
+	
+		// set a threshold to account for noise
+		int16_t thresh = 0x00FF;
+	
+	// read gyro
+	while(1) {
+		// need a delay so it can be read properly
+		HAL_Delay(100);
+		
+		// get x, register 0xA8 or 0x28 (x_low) & 0x29 (x_high)
+		setWrite(1);
+		if(checkTXIS(0xA8) == 1) {			// set the x-axis
+			flashLEDs(2);
+			return 1;
+		}
+		
+		checkTC();
+		setRead(2);
+		int8_t high, low;
+		
+		if(checkRXNE() == 1) {			// read the lower x-axis register
+			flashLEDs(3);
+			return 1;
+		}
+		
+		high = I2C2->RXDR;			// put the result into the variable
+		
+		if(checkRXNE() == 1) {			// read the higher x-axis register
+			flashLEDs(4);
+			return 1;
+		}
+		
+		low = I2C2->RXDR;			// put the result into the variable
+		
+		checkTC();
+		I2C2->CR2 |= I2C_CR2_STOP;
+		
+		int16_t xpos = (high << 8) | (low << 0);		// put the data together
+		
+		if(xpos < 0 - thresh) {
+			GPIOC->ODR |= (GPIO_ODR_8);
+		}
+		else {
+			GPIOC->ODR &= ~(GPIO_ODR_8);
+		}
+		if(xpos > thresh) {
+			GPIOC->ODR |= (GPIO_ODR_9);
+		}
+		else {
+			GPIOC->ODR &= ~(GPIO_ODR_9);
+		}
+		
+		// get y, register 0xAA or 0x2A (y_low) & 0x2B (y_high)
+	}
 }
 
 void partOne() {

@@ -3,9 +3,9 @@
 <title>Static Call Graph - [Lab05\Lab05.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Lab05\Lab05.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat May 04 21:22:56 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat May 04 21:33:06 2024
 <BR><P>
-<H3>Maximum Stack Usage =        160 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        176 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uldivmod
 <P>
@@ -183,7 +183,7 @@ Global Symbols
 <P><STRONG><a name="[82]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[37]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 160 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 176 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uldivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -407,7 +407,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flashLEDs
+<BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flashLEDs
 </UL>
 
 <P><STRONG><a name="[47]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetTick))
@@ -536,15 +537,18 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[5d]"></a>checkRXNE</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, main.o(i.checkRXNE))
-<BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
+<BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
 </UL>
 
 <P><STRONG><a name="[5b]"></a>checkTC</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, main.o(i.checkTC))
-<BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
+<BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
 </UL>
 
 <P><STRONG><a name="[5a]"></a>checkTXIS</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, main.o(i.checkTXIS))
-<BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
+<BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
 </UL>
 
 <P><STRONG><a name="[57]"></a>flashLEDs</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, main.o(i.flashLEDs))
@@ -567,26 +571,34 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[38]"></a>main</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uldivmod
+<P><STRONG><a name="[38]"></a>main</STRONG> (Thumb, 160 bytes, Stack size 24 bytes, main.o(i.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uldivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
+<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setupPins
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setupLEDs
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setupI2C
+<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setWrite
+<LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setRead
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flashLEDs
+<LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkTXIS
+<LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkTC
+<LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkRXNE
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
 <P><STRONG><a name="[5c]"></a>setRead</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.setRead))
-<BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
+<BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
 </UL>
 
 <P><STRONG><a name="[59]"></a>setWrite</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.setWrite))
-<BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
+<BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initGyro
 </UL>
 
 <P><STRONG><a name="[60]"></a>setupI2C</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, main.o(i.setupI2C))
