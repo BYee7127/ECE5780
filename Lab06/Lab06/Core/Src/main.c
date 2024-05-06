@@ -1,4 +1,3 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.c
@@ -15,46 +14,10 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+void setupLEDs(void);
 
 /**
   * @brief  The application entry point.
@@ -62,42 +25,62 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+	setupLEDs();		// 6.1 Q1
+	
+	// find a pin with ADC functionality (6.1 Q2)
+	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+	// PA2
+	GPIOA->MODER |= GPIO_MODER_MODER2;		// set to analog mode
+	GPIOA->PUPDR |= GPIO_PUPDR_PUPDR2_Pos;		// no pull-up/down resistors
 
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+  RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;			// enable the peripheral clock of the ADC (6.1 Q3)
+	
+	// configure the ADC to 8-bit resolution, continuous conversion mode, & hardware triggers disabled.
+	
+	
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
   }
-  /* USER CODE END 3 */
 }
 
+/*--helper functions----------------------------------------------------------------------------*/
+void setupLEDs(){
+	// enable the clock for the pins
+	RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+	
+	// LED modifications from lab1
+	GPIOC->MODER |= GPIO_MODER_MODER6_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_6);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR6);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR6);
+
+	GPIOC->MODER |= GPIO_MODER_MODER7_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_7);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR7);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR7);
+
+	GPIOC->MODER |= GPIO_MODER_MODER8_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_8);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR8);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR8);
+	
+	GPIOC->MODER |= GPIO_MODER_MODER9_0;
+	GPIOC->OTYPER &= ~(GPIO_OTYPER_OT_9);
+	GPIOC->OSPEEDR &= ~(GPIO_OSPEEDER_OSPEEDR9);
+	GPIOC->PUPDR &= ~(GPIO_PUPDR_PUPDR9);	
+
+	GPIOC->ODR &= ~(GPIO_ODR_6);
+	GPIOC->ODR &= ~(GPIO_ODR_7);
+	GPIOC->ODR &= ~(GPIO_ODR_8);
+	GPIOC->ODR &= ~(GPIO_ODR_9);
+}
+
+/*--auto-generated functions--------------------------------------------------------------------*/
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -132,10 +115,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
